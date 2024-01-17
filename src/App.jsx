@@ -1,4 +1,3 @@
-// Contoh dengan react-router-dom versi 6 atau yang lebih baru
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";

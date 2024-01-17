@@ -1,7 +1,7 @@
-// src/components/Register.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
+import Logo from "../pic/logo.png";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -11,13 +11,23 @@ const Register = () => {
   const [agreement, setAgreement] = useState(false);
 
   const handleRegister = () => {
-    // Implement registration logic here
     console.log("Registering...");
   };
 
   return (
     <div className="container mx-auto mt-10 border p-4 rounded-md">
-      <h1 className="text-3xl font-semibold mb-6">Daftar</h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginRight: "1rem",
+          }}
+        >
+          Register
+        </h1>
+        <img src={Logo} alt="" style={{ height: "100%", marginLeft: "auto" }} />
+      </div>
       <form>
         <div className="mb-4">
           <input

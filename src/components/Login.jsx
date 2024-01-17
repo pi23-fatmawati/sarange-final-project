@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
+import Logo from "../pic/logo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,18 @@ const Login = () => {
 
   return (
     <div className="container mx-auto mt-10 border p-4 rounded-md">
-      <h1 className="text-3xl font-semibold mb-6">Masuk</h1>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginRight: "1rem",
+          }}
+        >
+          Masuk
+        </h1>
+        <img src={Logo} alt="" style={{ height: "100%", marginLeft: "auto" }} />
+      </div>
       <form>
         <div className="mb-4">
           <input
