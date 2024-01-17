@@ -13,6 +13,8 @@ const Login = () => {
   };
 
   return (
+    // <div style={{display: "flex", alignItems:"center"}}>
+    //   <img src="" alt="" />
     <div className="container mx-auto mt-10 border p-4 rounded-md">
       <div style={{ display: "flex", alignItems: "center" }}>
         <h1
@@ -66,6 +68,7 @@ const Login = () => {
         Baru di Sarange? <Link to="/register">DAFTAR</Link>
       </p>
     </div>
+    // </div>
   );
 };
 export default Login;
