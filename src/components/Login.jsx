@@ -26,13 +26,19 @@ const Login = () => {
       <img
         src={Shoping}
         alt=""
-        style={{ height: "65%", width: "Auto", flex: 1 }}
+        style={{ height: "65%", flex: 1, maxWidth: "550px" }}
       />
       <div
         className="container mx-auto mt-10 border p-4 rounded-md"
-        style={{ flex: 1, margin: "0 40px" }}
+        style={{ flex: 1, margin: "0 40px", maxWidth: "450px" }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            margin: " 25px 10px 20px 10px",
+          }}
+        >
           <h1
             style={{
               fontSize: "1.5rem",
