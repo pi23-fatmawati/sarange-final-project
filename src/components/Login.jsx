@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
 import Logo from "../pic/logo.png";
-import Shoping from "../pic/shoping.png";
+import Shopping from "../pic/shopping.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,13 +20,18 @@ const Login = () => {
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
-        margin: "0 40px",
+        marginTop: "25px",
       }}
     >
       <img
-        src={Shoping}
-        alt=""
-        style={{ height: "65%", flex: 1, maxWidth: "550px" }}
+        src={Shopping}
+        alt="shopping img"
+        style={{
+          height: "Auto",
+          flex: 1,
+          maxWidth: "550px",
+          marginRight: "50px",
+        }}
       />
       <div
         className="container mx-auto mt-10 border p-4 rounded-md"
@@ -36,7 +41,7 @@ const Login = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            margin: " 25px 10px 20px 10px",
+            margin: " 25px 30px 20px 30px",
           }}
         >
           <h1
@@ -54,45 +59,58 @@ const Login = () => {
             style={{ height: "100%", marginLeft: "auto" }}
           />
         </div>
-        <form>
-          <div className="mb-4">
-            <input
-              type="email"
-              placeholder="Email"
-              className="mt-1 p-2 w-full border rounded-md"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <input
-              type="password"
-              placeholder="Katasandi"
-              className="mt-1 p-2 w-full border rounded-md"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            <label className="text-sm font-medium text-gray-600">
-              Ingatkan saya
-            </label>
-          </div>
-          <button
-            type="button"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={handleLogin}
-          >
-            Masuk
-          </button>
-        </form>
-        <p className="mt-4">
-          Baru di Sarange? <Link to="/register">DAFTAR</Link>
-        </p>
+        <div style={{ margin: " 25px 30px 20px 30px" }}>
+          <form>
+            <div className="mb-4">
+              <input
+                type="email"
+                placeholder="Email"
+                className="mt-1 p-2 w-full border rounded-md"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="password"
+                placeholder="Katasandi"
+                className="mt-1 p-2 w-full border rounded-md"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <label className="text-sm font-medium text-gray-600">
+                Ingatkan saya
+              </label>
+            </div>
+            <button
+              type="button"
+              className=" text-white w-full px-4 py-2 rounded-md"
+              style={{ backgroundColor: "#52C41A" }}
+              onClick={handleLogin}
+            >
+              Masuk
+            </button>
+          </form>
+          <p className="mt-4">
+            Baru di Sarange?{" "}
+            <Link
+              to="/register"
+              style={{
+                color: "#52C41A",
+                fontWeight: "bold",
+                textDecoration: "underline",
+              }}
+            >
+              DAFTAR
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
