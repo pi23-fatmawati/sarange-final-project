@@ -36,8 +36,14 @@ const CheckoutTable = () => {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>{/* ... header cells */}</tr>
+        <thead className="font-medium text-s text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <td className="px-6 py-4">
+            <input type="checkbox" className="form-checkbox" />
+          </td>
+          <td className="px-6 py-4">Nama Produk</td>
+          <td className="px-6 py-4">Jumlah Koin</td>
+          <td className="px-6 py-4">Berat</td>
+          <td className="px-6 py-4">Hapus</td>
         </thead>
         <tbody>
           {products.map((product) => (

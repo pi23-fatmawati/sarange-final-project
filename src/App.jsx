@@ -1,10 +1,14 @@
 import "./App.css";
 import CheckoutTable from "./components/CheckoutTable";
 import BottomNav from "./components/BottomNav";
+import Vector from "./pic/Vector.svg";
 function App() {
   return (
     <>
-      <h1>Test Checkout product</h1>
+      <div className="flex items-center">
+        <img src={Vector} alt="" />
+        <label>Keranjang Penjualan</label>
+      </div>
       <CheckoutTable />
       <BottomNav />
     </>
