@@ -34,7 +34,7 @@ const CheckoutTable = () => {
   };
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mr-16 ml-16">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="font-medium text-s text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <td className="px-6 py-4">
