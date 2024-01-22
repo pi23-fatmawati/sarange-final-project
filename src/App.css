@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.introduction-desc h1,
+.about-text h1,
+.why-desc h1,
+.gabung-desc h1 {
+  color: #58b958;
+}
+.terpercaya {
+  background-color: #f6ffed;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.gabung {
+  background-color: #d9f7be;
+}
+@media (max-width: 991.98px) {
+  .introduction {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .introduction-desc h1,
+  .introduction-desc p {
+    text-align: center;
+    margin-left: 1.25rem; /* 20px */
+    margin-right: 1.25rem; /* 20px */
+  }
+  .about-us,
+  .gabung {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .about-image {
+    width: 50% !important;
+  }
+  .about-image img {
+    height: auto;
+  }
+  .about-text {
+    text-align: center;
+  }
+  .about-text h1,
+  .about-text p,
+  .gabung-desc h1,
+  .gabung-desc p {
+    margin-left: 1.25rem; /* 20px */
+    margin-right: 1.25rem; /* 20px */
+  }
+}
+@media (max-width: 780px) {
+  .about-us {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .introduction-desc h1,
+  .about-text h1,
+  .why-desc h1,
+  .gabung-desc h1 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  .introduction-desc p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  .img-gabung,
+  .about-image,
+  .introduction-image {
+    margin-top: 2rem; /* 32px */
+    margin-bottom: 2rem; /* 32px */
+  }
+  .gabung-desc {
+    margin-bottom: 2.5rem;
+  }
+  .btn-profile {
+    height: 2rem;
+    margin-top: 0.25rem;
+  }
+}
