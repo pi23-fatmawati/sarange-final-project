@@ -14,8 +14,7 @@ function App() {
   return (
     <Router>
       <div>
-        {/* <UserProfile userData={userData} /> */}
-        <UserProfile />
+        <UserProfile userData={userData} />
       </div>
     </Router>
   );
