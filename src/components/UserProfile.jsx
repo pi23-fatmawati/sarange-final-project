@@ -11,6 +11,7 @@ const UserProfile = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,12 +21,20 @@ const UserProfile = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+  };
+
   const handleToggleEdit = () => {
     setIsEditing((prevIsEditing) => !prevIsEditing);
   };
 
   const handleSaveProfile = () => {
     console.log("Data yang disimpan:", userData);
+    if (selectedImage) {
+      console.log("New image:", selectedImage);
+    }
     setIsEditing(false);
   };
 
@@ -105,11 +114,33 @@ const UserProfile = () => {
             <div className="flex mb-2">
               <label className="block text-gray-600 w-1/4">Foto</label>
               <div className="w-3/4 md:w-2/3 lg:w-1/2">
-                <img
-                  src={userImage}
-                  alt="User Image"
-                  className="w-30 h-30 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-4"
-                />
+                {isEditing ? (
+                  <>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="mb-2"
+                    />
+                    {selectedImage && (
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected User Image"
+                        className="w-30 h-30 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mb-2"
+                      />
+                    )}
+                  </>
+                ) : (
+                  <img
+                    src={
+                      selectedImage
+                        ? URL.createObjectURL(selectedImage)
+                        : userImage
+                    }
+                    alt="User Image"
+                    className="w-30 h-30 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-4"
+                  />
+                )}
                 <label>svg, png, jpg or gif (max 800x400px)</label>
               </div>
             </div>
