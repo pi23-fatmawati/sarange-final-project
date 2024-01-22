@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import Profile from '../assets/profile.png'
 import Button from "./Button"
 import ButtonOutline from "./Button-outline"
+import ButtonGreen from "./Button-green"
 
 export default function NavbarSarange() {
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)
@@ -44,8 +45,8 @@ export default function NavbarSarange() {
                             <span className="block text-sm text-gray-900 font-bold text-center">User</span>
                             <span className="block text-sm  text-gray-500 truncate text-center">user@gmail.com</span>
                         </div>
-                        <div className="button-popup-profile mx-4 flex flex-col">
-                            <Button text='Lihat Profile'></Button>
+                        <div className="button-popup-profile mx-4 flex flex-col gap-2 p-4">
+                            <ButtonGreen text='Lihat Profile'></ButtonGreen>
                             <ButtonOutline text='Logout'></ButtonOutline>
                         </div>
                     </div>
