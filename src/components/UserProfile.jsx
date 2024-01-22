@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import userImage from "../pic/profilepic0.png";
-import ButtonGreen from "./Button-green";
 import NavbarSarange from "./Navbar-sarange";
-const UserProfile = ({ userData }) => {
+
+const UserProfile = () => {
+  const [userData, setUserData] = useState({
+    nama: "user sarange",
+    email: "usersarange@gmail.com",
+    nomorHp: "123456789",
+    alamat: "Jln Sarange No XX, Kec. XXXX Kab. XXX ",
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleToggleEdit = () => {
+    setIsEditing((prevIsEditing) => !prevIsEditing);
+  };
+
+  const handleSaveProfile = () => {
+    console.log("Data yang disimpan:", userData);
+    setIsEditing(false);
+  };
+
   return (
     <>
       <NavbarSarange />
@@ -14,39 +40,68 @@ const UserProfile = ({ userData }) => {
           <div>
             <div className="flex mb-2">
               <label className="block text-gray-600 w-1/4">Nama</label>
-              <input
-                type="text"
-                defaultValue={userData.nama}
-                className="text-gray-600 w-3/4 md:w-2/3 lg:w-1/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
-                readOnly
-              />
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="nama"
+                  value={userData.nama}
+                  onChange={handleChange}
+                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
+                  {userData.nama}
+                </div>
+              )}
             </div>
             <div className="flex mb-2">
               <label className="block text-gray-600 w-1/4">Email</label>
-              <input
-                type="email"
-                defaultValue={userData.email}
-                className="text-gray-600 w-3/4 md:w-2/3 lg:w-1/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
-                readOnly
-              />
+              {isEditing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={userData.email}
+                  onChange={handleChange}
+                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
+                  {userData.email}
+                </div>
+              )}
             </div>
             <div className="flex mb-2">
-              <label className="block text-gray-600 w-1/4">Nomor HP</label>
-              <input
-                type="tel"
-                defaultValue={userData.nomorHp}
-                className="text-gray-600 w-3/4 md:w-2/3 lg:w-1/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
-                readOnly
-              />
+              <label className="block text-gray-600 w-1/4">Email</label>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  name="nomorHp"
+                  value={userData.nomorHp}
+                  onChange={handleChange}
+                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
+                  {userData.nomorHp}
+                </div>
+              )}
             </div>
             <div className="flex mb-2">
               <label className="block text-gray-600 w-1/4">Alamat</label>
-              <textarea
-                defaultValue={userData.alamat}
-                className="text-gray-600 w-3/4 md:w-2/3 lg:w-1/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
-                readOnly
-              />
+              {isEditing ? (
+                <textarea
+                  name="alamat"
+                  value={userData.alamat}
+                  onChange={handleChange}
+                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 h-16">
+                  {userData.alamat}
+                </div>
+              )}
             </div>
+            {/* Sisipkan gambar */}
             <div className="flex mb-2">
               <label className="block text-gray-600 w-1/4">Foto</label>
               <div className="w-3/4 md:w-2/3 lg:w-1/2">
@@ -58,13 +113,28 @@ const UserProfile = ({ userData }) => {
                 <label>svg, png, jpg or gif (max 800x400px)</label>
               </div>
             </div>
+            {/* Sisipkan gambar */}
           </div>
         </div>
         <div
           style={{ backgroundColor: "#FBFBFB" }}
           className="px-4 py-4 rounded p-0 flex justify-end border-t"
         >
-          <ButtonGreen text="Edit Profile" />
+          {isEditing ? (
+            <button
+              onClick={handleSaveProfile}
+              className="px-4 py-2 bg-green-500 text-white rounded focus:outline-none focus:border-green-700"
+            >
+              Save Profile
+            </button>
+          ) : (
+            <button
+              onClick={handleToggleEdit}
+              className="px-4 py-2 bg-blue-500 text-white rounded focus:outline-none focus:border-blue-700"
+            >
+              Edit
+            </button>
+          )}
         </div>
       </div>
     </>
