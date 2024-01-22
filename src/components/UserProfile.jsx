@@ -47,7 +47,7 @@ const UserProfile = () => {
         </div>
         <div className="p-4 md:p-6">
           <div>
-            <div className="flex mb-2">
+            <div className="flex mb-4">
               <label className="block text-gray-600 w-1/4">Nama</label>
               {isEditing ? (
                 <input
@@ -63,7 +63,7 @@ const UserProfile = () => {
                 </div>
               )}
             </div>
-            <div className="flex mb-2">
+            <div className="flex mb-4">
               <label className="block text-gray-600 w-1/4">Email</label>
               {isEditing ? (
                 <input
@@ -79,7 +79,7 @@ const UserProfile = () => {
                 </div>
               )}
             </div>
-            <div className="flex mb-2">
+            <div className="flex mb-4">
               <label className="block text-gray-600 w-1/4">Email</label>
               {isEditing ? (
                 <input
@@ -95,7 +95,7 @@ const UserProfile = () => {
                 </div>
               )}
             </div>
-            <div className="flex mb-2">
+            <div className="flex mb-4">
               <label className="block text-gray-600 w-1/4">Alamat</label>
               {isEditing ? (
                 <textarea
@@ -111,7 +111,7 @@ const UserProfile = () => {
               )}
             </div>
             {/* Sisipkan gambar */}
-            <div className="flex mb-2">
+            <div className="flex mb-4">
               <label className="block text-gray-600 w-1/4">Foto</label>
               <div className="w-3/4 md:w-2/3 lg:w-1/2">
                 {isEditing ? (
@@ -126,7 +126,7 @@ const UserProfile = () => {
                       <img
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected User Image"
-                        className="w-30 h-30 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mb-2"
+                        className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mb-2"
                       />
                     )}
                   </>
@@ -138,7 +138,7 @@ const UserProfile = () => {
                         : userImage
                     }
                     alt="User Image"
-                    className="w-30 h-30 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full mr-4"
+                    className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mr-4"
                   />
                 )}
                 <label>svg, png, jpg or gif (max 800x400px)</label>
