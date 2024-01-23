@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import "./Register.css";
 import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
@@ -17,27 +18,17 @@ const Register = () => {
 
   return (
     <div
+      className=" flex flex-col lg:flex-row container-register"
       style={{
-        display: "flex",
+        height: "100vh",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
-        marginTop: "50px",
       }}
     >
-      <img
-        src={Shopping}
-        alt="shopping img"
-        style={{
-          height: "Auto",
-          flex: 1,
-          maxWidth: "550px",
-          marginRight: "50px",
-        }}
-      />
+      <img src={Shopping} alt="shopping img" className="shopping-img" />
       <div
-        className="container mx-auto mt-10 border p-4 rounded-md"
-        style={{ flex: 1, margin: "0 40px", maxWidth: "450px" }}
+        className="container-regis lg:flex-1 container  mt-10 border p-4 rounded-md "
+        style={{ maxWidth: "450px" }}
       >
         <div
           style={{
