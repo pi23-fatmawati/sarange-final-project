@@ -1,4 +1,7 @@
-/* Nav.css */
+nav {
+  margin-left: 75px;
+}
+
 ul {
   list-style: none;
   margin: 0;
@@ -19,4 +22,10 @@ a {
   color: #52c41a;
   font-weight: bold;
   border-bottom: 2px solid #52c41a; /* Ganti dengan warna yang diinginkan */
+}
+
+@media screen and (max-width: 767px) {
+  nav {
+    margin-left: 5px;
+  }
 }
