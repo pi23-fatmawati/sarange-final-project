@@ -2,9 +2,9 @@ import { useState } from "react"
 import Logo from '../assets/full-logo-sarange.svg'
 import { Link } from "react-router-dom"
 import Profile from '../assets/profile.png'
-import Button from "./Button"
 import ButtonOutline from "./Button-outline"
 import ButtonGreen from "./Button-green"
+import './component.css'
 
 export default function NavbarSarange() {
     const [isNavbarOpen, setIsNavbarOpen] = useState(false)
@@ -20,9 +20,9 @@ export default function NavbarSarange() {
         setClickedLink(link)
     }
     return (
-        <nav style={{backgroundColor: '#D3F8B7'}} className='fixed m-0 p-0 w-full top-0'>
+        <nav className='navbar-sarange fixed m-0 p-0 w-full top-0 bg-white'>
             <div className="navbar-content max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <Link to={'/#'} className="nav-img flex items-center space-x-3 rtl:space-x-reverse">
+                <Link to={'/home'} className="nav-img flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={Logo} className= 'h-9' alt="Sarange Logo"/>
                 </Link>
                 <div className="flex md:order-2 space-x-3 md:space-x-0">
@@ -40,7 +40,7 @@ export default function NavbarSarange() {
                         <img className="h-8 w-8 rounded-full" src={Profile} alt="user photo"/>
                     </button>
                     {/* Dropdown */}
-                    <div className={`z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 top-10 right-2 absolute ${isProfileOpen ? 'block' : 'hidden'}`} id="user-dropdown">
+                    <div className={`dropdown-profile absolute z-50 my-4 absolute text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 top-10 right-2 absolute ${isProfileOpen ? 'block' : 'hidden'}`} id="user-dropdown">
                         <div className="px-4 py-3">
                             <span className="block text-sm text-gray-900 font-bold text-center">User</span>
                             <span className="block text-sm  text-gray-500 truncate text-center">user@gmail.com</span>
