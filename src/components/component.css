@@ -12,3 +12,16 @@
     border: 1px solid #52C41A;
     color: #52C41A;
 }
+.btn-outline:hover {
+    background: #eafddc;
+}
+.nav-link{
+    color: grey;
+}
+.nav-link.active, .nav-link:hover {
+    color: #52C41A;
+}
+.product-card img {
+    height: 192px;
+    object-fit: cover;
+}
