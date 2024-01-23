@@ -1,5 +1,11 @@
 import "./History.css";
+import { useState } from "react";
+import Pagination from "./Pagination";
+
 const HistoryProcess = () => {
+  const itemsPerPage = 2; //banyak data yang tampil tiap page
+  const [currentPage, setCurrentPage] = useState(1);
+
   const transactionData = [
     {
       tanggalTransaksi: "2024-01-23",
@@ -22,10 +28,23 @@ const HistoryProcess = () => {
       waktuPenjemputan: "12:00",
       produk: "Karung, plastik bag",
       koin: 200,
-      status: "Diproses",
+      status: "Konfirmasi",
       detailLink: "/detail/transaksi/3",
     },
   ];
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(transactionData.length / itemsPerPage);
+
+  // Calculate the starting and ending index of the transactions for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, transactionData.length);
+
+  const currentTransactions = transactionData.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -42,7 +61,7 @@ const HistoryProcess = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {transactionData.map((transaction, index) => (
+            {currentTransactions.map((transaction, index) => (
               <tr
                 key={index}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
@@ -52,7 +71,14 @@ const HistoryProcess = () => {
                 <td className="px-6 py-4">{transaction.produk}</td>
                 <td className="px-6 py-4">{transaction.koin}</td>
                 <td className="px-6 py-4">
-                  <button className="status-button">
+                  <button
+                    className={`status-button ${
+                      transaction.status === "Konfirmasi"
+                        ? "confirmed-status"
+                        : "status-button"
+                    }`}
+                    disabled={transaction.status === "Diproses"}
+                  >
                     {transaction.status}
                   </button>
                 </td>
@@ -65,6 +91,14 @@ const HistoryProcess = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-4">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   );
