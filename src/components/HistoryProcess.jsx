@@ -43,7 +43,10 @@ const HistoryProcess = () => {
           </thead>
           <tbody className="text-center">
             {transactionData.map((transaction, index) => (
-              <tr key={index}>
+              <tr
+                key={index}
+                className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+              >
                 <td className="px-6 py-4">{transaction.tanggalTransaksi}</td>
                 <td className="px-6 py-4">{transaction.waktuPenjemputan}</td>
                 <td className="px-6 py-4">{transaction.produk}</td>
