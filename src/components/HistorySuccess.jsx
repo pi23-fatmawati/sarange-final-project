@@ -1,31 +1,51 @@
 import "./History.css";
-const transactionData = [
-  {
-    tanggalTransaksi: "2024-01-23",
-    waktuPenjemputan: "10:00",
-    produk: "Botol Plastik, Botol Kaca",
-    koin: 250,
-    status: "Selesai",
-    detailLink: "/detail/transaksi/1",
-  },
-  {
-    tanggalTransaksi: "2024-01-22",
-    waktuPenjemputan: "08:00",
-    produk: "Botol kaca",
-    koin: 30,
-    status: "Selesai",
-    detailLink: "/detail/transaksi/2",
-  },
-  {
-    tanggalTransaksi: "2024-01-21",
-    waktuPenjemputan: "12:00",
-    produk: "Karung, plastik bag",
-    koin: 200,
-    status: "Selesai",
-    detailLink: "/detail/transaksi/3",
-  },
-];
+import { useState } from "react";
+import Pagination from "./Pagination";
+
 const HistorySuccess = () => {
+  const itemsPerPage = 2; //banyak data yang tampil tiap page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const transactionData = [
+    {
+      tanggalTransaksi: "2024-01-23",
+      waktuPenjemputan: "10:00",
+      produk: "Botol Plastik, Botol Kaca",
+      koin: 250,
+      status: "Selesai",
+      detailLink: "/detail/transaksi/1",
+    },
+    {
+      tanggalTransaksi: "2024-01-22",
+      waktuPenjemputan: "08:00",
+      produk: "Botol kaca",
+      koin: 30,
+      status: "Selesai",
+      detailLink: "/detail/transaksi/2",
+    },
+    {
+      tanggalTransaksi: "2024-01-21",
+      waktuPenjemputan: "12:00",
+      produk: "Karung, plastik bag",
+      koin: 200,
+      status: "Selesai",
+      detailLink: "/detail/transaksi/3",
+    },
+  ];
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(transactionData.length / itemsPerPage);
+
+  // Calculate the starting and ending index of the transactions for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, transactionData.length);
+
+  const currentTransactions = transactionData.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <>
       <div className="relative overflow-x-auto sm:rounded-lg">
@@ -41,7 +61,7 @@ const HistorySuccess = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {transactionData.map((transaction, index) => (
+            {currentTransactions.map((transaction, index) => (
               <tr
                 key={index}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
@@ -67,6 +87,14 @@ const HistorySuccess = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-4">
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   );
