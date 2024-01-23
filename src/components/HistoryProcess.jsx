@@ -1,3 +1,4 @@
+import "./History.css";
 const HistoryProcess = () => {
   const transactionData = [
     {
@@ -48,13 +49,13 @@ const HistoryProcess = () => {
                 <td className="px-6 py-4">{transaction.produk}</td>
                 <td className="px-6 py-4">{transaction.koin}</td>
                 <td className="px-6 py-4">
-                  <button className="text-blue-500">
+                  <button className="status-button">
                     {transaction.status}
                   </button>
                 </td>
                 <td className="px-6 py-4">
-                  <a href={transaction.detailLink} className="text-blue-500">
-                    <button>Detail</button>
+                  <a href={transaction.detailLink} className="detail-button">
+                    <button>Cek Detail</button>
                   </a>
                 </td>
               </tr>
