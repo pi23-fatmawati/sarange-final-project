@@ -1,9 +1,9 @@
 import "./App.css";
-
+import HistoryProcess from "./components/HistoryProcess";
 function App() {
   return (
     <>
-      <p>ini halaman riwayat transaksi</p>
+      <HistoryProcess />
     </>
   );
 }
