@@ -48,7 +48,7 @@ const HistoryProcess = () => {
 
   return (
     <>
-      <div className="relative overflow-x-auto sm:rounded-lg">
+      <div className="relative overflow-x-auto sm:rounded-lg mt-4">
         <table className="w-full text-sm rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="font-medium text-center text-s text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
