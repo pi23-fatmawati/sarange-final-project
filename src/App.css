@@ -40,6 +40,30 @@ body{
 .carousel-img{
   width: 100vw;
 }
+.redeem-content{
+  background-color: #F2F8EA;
+  border-radius: 20px;
+  border: solid 2px #E2E2E2;
+}
+.selected-card, .selected-ewallet{
+  background-color: #E2E2E2;
+  border: solid 2px #58B958;
+}
+.btn-klaim:disabled{
+  background-color: #d4ffbe;
+}
+.btn-klaim:disabled:hover{
+  background-color: #d4ffbe;
+}
+.btn-klaim{
+    background-color: #52C41A;
+}
+.btn-klaim:hover{
+    background-color: #254416;
+}
+.redeem-ewallet, .redeem-card{
+  gap: 2.5rem;
+}
 @media (max-width: 991.98px) {
   .introduction{
     display: flex;
@@ -139,5 +163,16 @@ body{
   .redeem-coin p{
     font-size: 0.875rem; /* 14px */
     line-height: 1.25rem; /* 20px */
+  }
+  .redeem-card {
+    flex-wrap: wrap; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    gap: 1rem;
+  }
+  .card-redeem {
+    width: 100%;
+  }
+  .redeem-ewallet{
+    gap: 1rem;
   }
 }
