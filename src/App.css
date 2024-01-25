@@ -71,6 +71,9 @@ body{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   border-radius: 16px;
 }
+.dropdown-filter{
+  background-color: #F7F6FE;
+}
 @media (max-width: 991.98px) {
   .introduction{
     display: flex;
