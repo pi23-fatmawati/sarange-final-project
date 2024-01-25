@@ -45,3 +45,27 @@ input.count-checkout::-webkit-outer-spin-button {
 input.count-checkout[type=number] {
     -moz-appearance: textfield;
 }
+.status-button {
+  background-color: #ffd666;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.confirmed-status {
+  background-color: #52c41a;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.detail-button {
+  background-color: #52c41a;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.tab-item.active {
+  color: #52C41A;
+}

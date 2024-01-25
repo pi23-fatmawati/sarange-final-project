@@ -1,10 +1,8 @@
 import "./component.css";
-export default function ButtonGreen({
+export default function ButtonYellow({
   text,
-  dataModalTrigger,
   onClick,
   onConfirm,
-  padding
 }) {
   const handleClick = (e) => {
     if (onConfirm) {
@@ -13,11 +11,9 @@ export default function ButtonGreen({
       onClick(e);
     }
   };
-  const buttonClasses = `btn-green py-1.5 ${padding || 'px-7'} font-normal rounded-lg text-white`;
   return (
     <button
-      className={buttonClasses}
-      data-modal-trigger={dataModalTrigger}
+      className="bg-yellow-300 py-1.5 px-4 font-normal rounded-lg text-black"
       onClick={handleClick}
     >
       {text}

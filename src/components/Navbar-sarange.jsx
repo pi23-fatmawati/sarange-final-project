@@ -140,11 +140,11 @@ export default function NavbarSarange() {
             </li>
             <li>
               <Link
-                to={"/sell/transaction"}
+                to={"/sell/transactions"}
                 className="nav-link block py-2 px-3 rounded md:p-0"
                 onClick={() => {
                   handleClickedLink("Riwayat");
-                  navigate("/sell/transaction");
+                  navigate("/sell/transactions");
                 }}
                 style={{
                   color: clickedLink === "Riwayat" ? "#52C41A" : "grey",

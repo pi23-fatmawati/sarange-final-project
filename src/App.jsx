@@ -7,7 +7,8 @@ import NavbarLandingPage from "./components/navbar-landing-page";
 import NavbarSarange from "./components/Navbar-sarange";
 import Checkout from "./pages/Checkout";
 import PickUp from "./pages/PickUp";
-import "./App.css"
+import "./App.css";
+import Transactions from "./pages/Transactions";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/pick-up" element={<PickUp />} />
-                <Route path="/transactions" />
+                <Route path="/transactions" element={<Transactions />} />
                 <Route path="/transactions/:id" />
                 <Route path="/education" />
               </Routes>
