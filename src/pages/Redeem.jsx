@@ -9,6 +9,7 @@ import Shopeepay from '../assets/shopeepay.png';
 import Dana from '../assets/dana.png';
 import Ovo from '../assets/ovo.png';
 import ButtonOutline from "../components/Button-outline";
+import { useNavigate } from "react-router-dom";
 
 export default function Redeem() {
     const data = [
@@ -43,6 +44,7 @@ export default function Redeem() {
       setSelectedEwallet(id);
     };
     const isAnyCardSelected = selectedCard !== null && selectedEwallet !== null;
+    const navigate = useNavigate();
   
     return (
       <>
@@ -72,8 +74,11 @@ export default function Redeem() {
               ))}
             </div>
             <div className="btn-claim flex gap-10 mt-5">
-                <ButtonOutline text='Kembali'></ButtonOutline>
-                <button className="btn-klaim px-10 text-center rounded text-white" disabled={!isAnyCardSelected}>Klaim</button>
+                <ButtonOutline text='Kembali' onClick={()=> navigate(-1)}></ButtonOutline>
+                <button 
+                    className="btn-klaim px-10 text-center rounded text-white" 
+                    disabled={!isAnyCardSelected}
+                    onClick={() => navigate('/redeem-form')}>Klaim</button>
             </div>
           </div>
         </div>

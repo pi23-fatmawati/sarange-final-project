@@ -4,6 +4,7 @@ import './App.css'
 import HomePage from './pages/Home'
 import Redeem from './pages/Redeem'
 import FormRedeem from './pages/Form-redeem'
+import RedeemSuccess from './pages/Redeem-success'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path='/home' element={<HomePage></HomePage>}></Route>
           <Route path='/redeem' element={<Redeem></Redeem>}></Route>
           <Route path='/redeem-form' element={<FormRedeem></FormRedeem>}></Route>
+          <Route path='/redeem-success' element={<RedeemSuccess></RedeemSuccess>}></Route>
         </Routes>
       </BrowserRouter>
     </>
