@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
+import HeaderPage from "../components/HeaderPage";
 
 function Product() {
   const URL = "https://656bda9ee1e03bfd572ddc89.mockapi.io/sarange/listSampah";
@@ -20,15 +21,12 @@ function Product() {
     }
   };
   if (products.length === 0) {
-    return <div className="mt-20 py-10 px-20 flex justify-center items-center">Loading...</div>;
+    return <div className="container-page flex justify-center items-center">Loading...</div>;
   }
   return (
     <>
-      <div className="flex flex-col mt-20 py-10 px-20 gap-4 w-full" id="container">
-        <div>
-          <h1 className="text-2xl font-medium mb-1">Hai user, mau jual apa hari ini?</h1>
-          <p className="mb-2">Yuk, jaga bumi dan dapatkan koin dari setiap penjualan sampahmu!</p>
-        </div>
+      <div className="container-page flex flex-col gap-4 w-full">
+        <HeaderPage title="Hai user, mau jual apa hari ini?"  subtitle="Yuk, jaga bumi dan dapatkan koin dari setiap penjualan sampahmu!" />
         <div
           className="flex flex-wrap w-full justify-center gap-5 items-start"
           id="product-card"
@@ -47,7 +45,7 @@ function Product() {
           })}
           ;
         </div>
-        <Cart className="ml-auto" />
+        <Cart />
       </div>
     </>
   );

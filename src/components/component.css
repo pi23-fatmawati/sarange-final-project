@@ -25,3 +25,23 @@
     height: 192px;
     object-fit: cover;
 }
+.increment, .decrement {
+  border: none;
+  text-decoration: none;
+  border-radius: 8px;
+  background-color: #a1e268;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+}
+.decrement {
+  background-color: #c7c7c7;
+}
+input.count-checkout::-webkit-inner-spin-button,
+input.count-checkout::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input.count-checkout[type=number] {
+    -moz-appearance: textfield;
+}

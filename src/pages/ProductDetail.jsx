@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Card } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import BackNavigation from "../components/BackNavigation";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -26,21 +26,15 @@ function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="mt-20 py-10 px-20 flex justify-center items-center">
+      <div className="container-page flex justify-center items-center">
         Loading...
       </div>
     );
   }
   return (
     <>
-      <div className="mt-20 py-10 px-20">
-        <div className="mb-3 flex items-center gap-2">
-          <FontAwesomeIcon
-            icon={faCircleArrowLeft}
-            className="text-green-2 text-2xl"
-          />
-          <h3 className="text-lg text-grey-2">Jual Sampah</h3>
-        </div>
+      <div className="container-page">
+        <BackNavigation page="Jual Sampah" />
         <Card
           className="detail-card md:max-w-full gap-3"
           imgSrc={product.img}
