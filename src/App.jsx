@@ -5,6 +5,7 @@ import HomePage from './pages/Home'
 import Redeem from './pages/Redeem'
 import FormRedeem from './pages/Form-redeem'
 import RedeemSuccess from './pages/Redeem-success'
+import HistoryCoin from './pages/history-coin'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/redeem' element={<Redeem></Redeem>}></Route>
           <Route path='/redeem-form' element={<FormRedeem></FormRedeem>}></Route>
           <Route path='/redeem-success' element={<RedeemSuccess></RedeemSuccess>}></Route>
+          <Route path='/history-coin' element={<HistoryCoin></HistoryCoin>}></Route>
         </Routes>
       </BrowserRouter>
     </>
