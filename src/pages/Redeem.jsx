@@ -1,7 +1,6 @@
 import { useState } from "react";
 import CardCoin from "../components/Card-coin";
 import CardRedeem from "../components/Card-redeem";
-import NavbarSarange from "../components/Navbar-sarange";
 import '../App.css';
 import CardEwallet from "../components/Card-ewallet";
 import Gopay from '../assets/gopay.png';
@@ -10,6 +9,7 @@ import Dana from '../assets/dana.png';
 import Ovo from '../assets/ovo.png';
 import ButtonOutline from "../components/Button-outline";
 import { useNavigate } from "react-router-dom";
+import BackNavigation from "../components/BackNavigation";
 
 export default function Redeem() {
     const data = [
@@ -47,8 +47,8 @@ export default function Redeem() {
     const navigate = useNavigate();
   
     return (
-      <>
-        <NavbarSarange></NavbarSarange>
+      <div className="container-page">
+        <BackNavigation page="Beranda" />
         <div className="redeem-coin container mx-auto">
           <CardCoin coin={1000}></CardCoin>
           <div className="redeem-content mt-8 flex flex-col items-center py-8">
@@ -78,10 +78,10 @@ export default function Redeem() {
                 <button 
                     className="btn-klaim px-10 text-center rounded text-white" 
                     disabled={!isAnyCardSelected}
-                    onClick={() => navigate('/redeem-form')}>Klaim</button>
+                    onClick={() => navigate('/sell/form-redeem')}>Klaim</button>
             </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }

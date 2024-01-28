@@ -8,7 +8,7 @@ export default function RedeemSuccess(){
         <div className="redeem-success flex flex-col justify-center items-center gap-4 w-full h-screen">
             <img src={Success} alt="redeem success" />
             <p className='font-semibold'>Terima kasih telah mendukung sarange </p>
-            <ButtonGreen text='Kembali' onClick={()=> navigate('/home')}></ButtonGreen>
+            <ButtonGreen text='Kembali' onClick={()=> navigate('/sell/home')}></ButtonGreen>
         </div>
     )
 }

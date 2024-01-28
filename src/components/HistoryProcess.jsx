@@ -83,16 +83,13 @@ const HistoryProcess = () => {
                 </td>
                 <td className="px-6 py-4">
                   <Link
-                    to={{
-                      pathname: `/sell/transactions/${transaction.id}`,
-                      state: { transaction },
-                    }}
+                    to={`/sell/transactions/${transaction.id}?tanggalTransaksi=${transaction.tanggalTransaksi}&waktuPenjemputan=${transaction.waktuPenjemputan}&produk=${transaction.produk}&koin=${transaction.koin}&status=${transaction.status}`}
                   >
                     <ButtonOutline
                       text="Cek Detail"
                       width="w-max"
                       padding="px-4"
-                      onClick={() => console.log(transaction)}
+                      // onClick={() => console.log(transaction)}
                     />
                   </Link>
                 </td>

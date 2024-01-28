@@ -26,7 +26,7 @@ export default function NavbarSarange() {
   return (
     <nav
       style={{ backgroundColor: "white" }}
-      className="fixed m-0 p-0 w-full top-0 shadow"
+      className="fixed m-0 p-0 w-full top-0 shadow z-20"
     >
       <div className="navbar-content max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link

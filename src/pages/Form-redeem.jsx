@@ -53,7 +53,7 @@ export default function FormRedeem(){
                         <p className='w-60 text-center'>Pastikan nomor handphone dan email anda sudah benar</p>
                         <div className="btn-popup flex gap-4 mt-4">
                             <ButtonOutline text='Kembali' onClick={closePopup}></ButtonOutline>
-                            <ButtonGreen text='Kirim' onClick={()=> navigate('/redeem-success')}></ButtonGreen>
+                            <ButtonGreen text='Kirim' onClick={()=> navigate('/sell/redeem-success')}></ButtonGreen>
                         </div>
                     </div>
                 </div>

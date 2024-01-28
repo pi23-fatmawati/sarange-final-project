@@ -3,7 +3,7 @@ import Coin from "../assets/coin.png";
 import Redeem from "../assets/redeem.png";
 import Image1 from "../assets/carousel-1.png";
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 
 export default function HomePage() {
@@ -27,20 +27,24 @@ export default function HomePage() {
         <div className="img-home mt-20 w-full">
           <img className="w-full" src={Home} alt="image home" />
         </div>
-        <div className="text-home container mx-auto absolute text-center justify-center items-center w-full right-0 left-0 mt-5">
-          <p className="text-xl font-medium">Hai User, Terima kasih ya</p>
-          <h1 className="text-3xl font-bold py-1">10 Kg</h1>
+        <div className="text-home flex flex-col gap-1 container mx-auto absolute text-center justify-center items-center w-full right-0 left-0 mt-5">
+          <p className="text-xl font-medium">Hai User! Terima kasih, ya</p>
+          <h1 className="text-3xl font-bold py-1">
+            10kg CO<sub>2</sub>
+          </h1>
           <p className="text-xl font-medium">
-            CO<sub>2</sub> berkurang karenamu{" "}
+            telah berkurang berkat penjualan sampahmu.
           </p>
-          <button className="btn-home text-white mt-2 py-2 px-10 rounded-full">
-            Jual Sekarang
-          </button>
+          <Link to="/sell/products">
+            <button className="btn-home text-white mt-2 py-2 px-10 rounded-full">
+              Jual Sekarang
+            </button>
+          </Link>
         </div>
       </div>
       <div className="coin container mt-5 mx-auto w-full flex justify-around p-2">
         <Link
-          to={"/history-coin"}
+          to={"/sell/history-coin"}
           className="coin-user flex items-center gap-2 mx-auto"
         >
           <img src={Coin} className="w-auto max-h-12" alt="coin image" />
@@ -49,7 +53,7 @@ export default function HomePage() {
         </Link>
         <div className="line"></div>
         <Link
-          to={"/redeem"}
+          to={"/sell/redeem"}
           className="redeem-coin flex items-center gap-2 mx-auto"
         >
           <img src={Redeem} className="w-auto max-h-12" alt="reedem image" />
@@ -97,7 +101,9 @@ export default function HomePage() {
                   {slides.map((_, i) => (
                     <div
                       key={i}
-                      className={`transition-all w-1.5 h-1.5 bg-white rounded-full ${curr === i ? "p-0.5" : "bg-opacity-50"}`}
+                      className={`transition-all w-1.5 h-1.5 bg-white rounded-full ${
+                        curr === i ? "p-0.5" : "bg-opacity-50"
+                      }`}
                     />
                   ))}
                 </div>
