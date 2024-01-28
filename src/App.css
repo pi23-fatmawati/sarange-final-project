@@ -13,6 +13,74 @@
   padding: 40px 80px;
 
 }
+.img-home img{
+  border-radius: 32px;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.text-home{
+  color: #1B501C;
+}
+.btn-home{
+  background-color: #5B7D2E;
+}
+.btn-home:hover{
+  background-color: #1B501C;
+}
+.coin{
+  background-color: #F2F8EA;
+  border-radius: 20px;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.line{
+  border-left: solid 2px #C4C4C4;
+}
+.slide-image{
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.carousel-img{
+  width: 100vw;
+}
+.redeem-content{
+  background-color: #F2F8EA;
+  border-radius: 20px;
+  border: solid 2px #E2E2E2;
+}
+.selected-card, .selected-ewallet{
+  background-color: #E2E2E2;
+  border: solid 2px #58B958;
+}
+.btn-klaim:disabled{
+  background-color: #d4ffbe;
+}
+.btn-klaim:disabled:hover{
+  background-color: #d4ffbe;
+}
+.btn-klaim{
+    background-color: #52C41A;
+}
+.btn-klaim:hover{
+    background-color: #254416;
+}
+.redeem-ewallet, .redeem-card{
+  gap: 2.5rem;
+}
+.popup{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.popup-content{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+}
+.dropdown-filter{
+  background-color: #F7F6FE;
+}
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
 @media (max-width: 991.98px) {
   .introduction{
     display: flex;
@@ -45,7 +113,7 @@
   }
  
 }
-@media (max-width: 780px) {
+@media (max-width: 766px) {
   .about-us{
     display: flex;
     justify-content: center;
@@ -74,11 +142,4 @@
     height: 2rem;
     margin-top: 0.25rem;
   }
-}
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

@@ -69,3 +69,37 @@ input.count-checkout[type=number] {
 .tab-item.active {
   color: #52C41A;
 }
+.card-coin{
+    background-color: #F2F8EA;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+}
+.card-redeem{
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+.line-redeem{
+    border-bottom: solid 2px #C4C4C4;
+    width: 130px;
+}
+.card-redeem-content{
+    color: #52C41A;
+}
+.card-ewallet{
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+@media (max-width: 766px){
+    .card-redeem{
+        width: 5rem;
+    }
+    .line-redeem{
+        width: 5rem;
+    }
+    .card-redeem-content h1{
+        font-size: 1rem; /* 24px */
+    }
+}
