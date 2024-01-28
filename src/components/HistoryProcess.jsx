@@ -4,6 +4,7 @@ import Pagination from "./Pagination";
 import ButtonGreen from "./Button-green";
 import ButtonYellow from "./ButtonYellow";
 import ButtonOutline from "./Button-outline";
+import { Link } from "react-router-dom";
 
 const HistoryProcess = () => {
   const itemsPerPage = 2; //banyak data yang tampil tiap page
@@ -11,28 +12,28 @@ const HistoryProcess = () => {
 
   const transactionData = [
     {
+      id: 1,
       tanggalTransaksi: "2024-01-23",
       waktuPenjemputan: "10:00",
       produk: "Botol Plastik, Botol Kaca",
       koin: 250,
       status: "Diproses",
-      detailLink: "/detail/transaksi/1",
     },
     {
+      id: 2,
       tanggalTransaksi: "2024-01-22",
       waktuPenjemputan: "08:00",
       produk: "Botol kaca",
       koin: 30,
       status: "Diproses",
-      detailLink: "/detail/transaksi/2",
     },
     {
+      id: 3,
       tanggalTransaksi: "2024-01-21",
       waktuPenjemputan: "12:00",
       produk: "Karung, plastik bag",
       koin: 200,
       status: "Konfirmasi",
-      detailLink: "/detail/transaksi/3",
     },
   ];
 
@@ -52,8 +53,8 @@ const HistoryProcess = () => {
   return (
     <>
       <div className="tabel relative overflow-x-auto sm:rounded-lg mt-4">
-        <table className="w-full text-sm rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="font-medium text-center text-s text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm rtl:text-right">
+          <thead className="font-medium text-center text-s text-white uppercase bg-green-2">
             <tr>
               <th className="px-6 py-4">Tanggal Transaksi</th>
               <th className="px-6 py-4">Waktu Penjemputan</th>
@@ -81,13 +82,19 @@ const HistoryProcess = () => {
                   )}
                 </td>
                 <td className="px-6 py-4">
-                  <a href={transaction.detailLink}>
+                  <Link
+                    to={{
+                      pathname: `/sell/transactions/${transaction.id}`,
+                      state: { transaction },
+                    }}
+                  >
                     <ButtonOutline
                       text="Cek Detail"
                       width="w-max"
                       padding="px-4"
+                      onClick={() => console.log(transaction)}
                     />
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ))}

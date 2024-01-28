@@ -78,10 +78,11 @@ export default function PickUp() {
           setSuccessModal(true);
         }}
         header="Apakah kamu sudah yakin dengan jadwal penjemputanmu?"
-        content="Jadwal penjemputanmu adalah 20 Januari 2024"
+        content="Sampahmu akan dijemput pada 20 Januari 2024"
       />
       <SuccessModal
         show={successModal}
+        link="/sell/transactions"
         onClose={() => setSuccessModal(false)}
         header="Penjemputan sampahmu berhasil dijadwalkan"
         content="Pastikan sampahmu sudah siap dan sesuai dengan ketentuan. Sampah akan dijemput pada tanggal 20 Januari 2024 antara pukul 08.00 - 17.00 WIB."

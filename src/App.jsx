@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout";
 import PickUp from "./pages/PickUp";
 import "./App.css";
 import Transactions from "./pages/Transactions";
+import DetailTransaction from "./pages/DetailTransaction";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/pick-up" element={<PickUp />} />
                 <Route path="/transactions" element={<Transactions />} />
-                <Route path="/transactions/:id" />
+                <Route path="/transactions/:id" element={<DetailTransaction/>} />
                 <Route path="/education" />
               </Routes>
             </>

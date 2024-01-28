@@ -1,10 +1,13 @@
 import { Modal } from "flowbite-react";
 import { HiCheckCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
-export default function SuccessModal({ show, header, content, onClose }) {
+export default function SuccessModal({ show, header, content, onClose, link }) {
   return (
     <Modal size="md" show={show} onClose={onClose} popup>
-      <Modal.Header />
+      <Link to={link}>
+        <Modal.Header />
+      </Link>
       <Modal.Body>
         <div className="flex flex-col gap-3 text-center">
           <HiCheckCircle className="mx-auto h-14 w-14 text-green-2" />
