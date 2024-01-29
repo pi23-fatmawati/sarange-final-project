@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Logo from "../assets/full-logo-sarange.svg";
 import { Link, useNavigate } from "react-router-dom";
 import Profile from "../assets/profile.png";
@@ -10,6 +10,24 @@ export default function NavbarSarange() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [clickedLink, setClickedLink] = useState("Beranda");
   const navigate = useNavigate();
+  const profileButtonRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileButtonRef.current &&
+        !profileButtonRef.current.contains(event.target)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const toggleNavbar = () => {
     setIsNavbarOpen(!isNavbarOpen);
@@ -45,6 +63,7 @@ export default function NavbarSarange() {
             aria-controls="user-dropdown"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
+            ref={profileButtonRef}
           >
             <span className="sr-only">Open user menu</span>
             <img
@@ -69,7 +88,9 @@ export default function NavbarSarange() {
               </span>
             </div>
             <div className="button-popup-profile mx-4 flex flex-col gap-2 p-4">
-              <ButtonGreen text="Lihat Profile"></ButtonGreen>
+              <Link to="/sell/profile">
+                <ButtonGreen text="Lihat Profile"></ButtonGreen>
+              </Link>
               <ButtonOutline text="Logout"></ButtonOutline>
             </div>
           </div>
