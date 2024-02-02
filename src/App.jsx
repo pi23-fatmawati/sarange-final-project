@@ -10,21 +10,33 @@ import PickUp from "./pages/PickUp";
 import "./App.css";
 import Transactions from "./pages/Transactions";
 import DetailTransaction from "./pages/DetailTransaction";
-import Redeem from './pages/Redeem'
-import FormRedeem from './pages/Form-redeem'
-import RedeemSuccess from './pages/Redeem-success'
-import HistoryCoin from './pages/history-coin'
+import Redeem from "./pages/Redeem";
+import FormRedeem from "./pages/Form-redeem";
+import RedeemSuccess from "./pages/Redeem-success";
+import HistoryCoin from "./pages/history-coin";
+import Education from "./pages/Education";
+import Footer from "./components/Footer";
+import { ArticleProvider } from "./context/ArticleContext";
+import Article from "./pages/Article";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
     <BrowserRouter>
+      <ArticleProvider>
       <Routes>
         <Route
-          path="/"
+          path="/*"
           element={
             <>
               <NavbarLandingPage />
-              <LandingPage />
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/education" element={<Education />} />
+                <Route path="/education/:id" element={<Article />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+              <Footer />
             </>
           }
         />
@@ -44,13 +56,16 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/pick-up" element={<PickUp />} />
                 <Route path="/transactions" element={<Transactions />} />
-                <Route path="/transactions/:id" element={<DetailTransaction/>} />
-                <Route path="/education" />
+                <Route
+                  path="/transactions/:id"
+                  element={<DetailTransaction />}
+                />
               </Routes>
             </>
           }
         />
       </Routes>
+      </ArticleProvider>
     </BrowserRouter>
   );
 }

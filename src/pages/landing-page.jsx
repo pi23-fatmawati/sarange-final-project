@@ -7,7 +7,6 @@ import Aman from "../assets/aman.png";
 import Terpercaya from "../assets/terpercaya.png";
 import Gabung from "../assets/gabung-sekarang.png";
 import Button from "../components/Button";
-import Footer from "../components/Footer";
 
 export default function LandingPage() {
   return (
@@ -72,7 +71,6 @@ export default function LandingPage() {
           <Button text="Gabung Sekarang"></Button>
         </div>
       </div>
-      <Footer></Footer>
     </>
   );
 }

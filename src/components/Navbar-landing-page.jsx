@@ -15,7 +15,7 @@ export default function NavbarLandingPage () {
         setClickedLink(link)
     }
     return(
-        <nav style={{backgroundColor: '#D3F8B7'}} className='fixed m-0 p-0 w-full top-0'>
+        <nav style={{backgroundColor: '#D3F8B7'}} className='fixed m-0 p-0 w-full top-0 z-20'>
             <div className="navbar-content max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <HashLink smooth to={'/#'} className="nav-img flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={Logo} className= 'h-9' alt="Sarange Logo"/>
@@ -43,12 +43,12 @@ export default function NavbarLandingPage () {
                             onClick={()=> handleClickedLink('Tentang')}
                             style={{color: clickedLink === 'Tentang' ? '#254416' : '#52C41A',}} 
                             aria-current="page">Tentang Kami</HashLink></li>
-                        <li><Link to={'/Contact'} 
+                        <li><Link to={'/contact'} 
                             className='nav-link block py-2 px-3 rounded md:p-0'
                             onClick={()=> handleClickedLink('Kontak')}
                             style={{color: clickedLink === 'Kontak' ? '#254416' : '#52C41A',}} 
                             aria-current="page">Kontak</Link></li>
-                        <li><Link to={'/Edukasi'} 
+                        <li><Link to={'/education'} 
                             className='nav-link block py-2 px-3 rounded md:p-0'
                             onClick={()=> handleClickedLink('Edukasi')}
                             style={{color: clickedLink === 'Edukasi' ? '#254416' : '#52C41A',}} 
