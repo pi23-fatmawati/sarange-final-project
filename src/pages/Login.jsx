@@ -1,18 +1,41 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = () => {
-    console.log("Logging in...");
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    console.log("Handle Login function dipanggil");
+    try {
+      const response = await axios.post(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+
+      // Tangani respons dari server
+      const { token } = response.data;
+
+      // Simpan token ke dalam local storage atau session storage
+      localStorage.setItem("token", token);
+
+      console.log("Login berhasil. Token:", token);
+      navigate("/sell/home");
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
 
   return (
@@ -110,4 +133,5 @@ const Login = () => {
     </>
   );
 };
+
 export default Login;

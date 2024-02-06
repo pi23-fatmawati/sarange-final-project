@@ -1,18 +1,55 @@
-import React, { useState } from "react";
-import userImage from "../pic/profilepic0.png";
+import React, { useState, useEffect } from "react";
+// import userImage from "../pic/profilepic0.png";
 import NavbarSarange from "../components/Navbar-sarange";
-import Button from "../components/Button";
+import axios from "axios";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState({
-    nama: "user sarange",
-    email: "usersarange@gmail.com",
-    nomorHp: "123456789",
-    alamat: "Jln Sarange No XX, Kec. XXXX Kab. XXX ",
+    nama: "",
+    email: "",
+    nomorHp: "",
+    alamat: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState();
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+
+      const userProfileData = response.data.user;
+      setUserData({
+        nama: userProfileData.user_name,
+        email: userProfileData.email,
+        nomorHp: userProfileData.phone_number,
+        alamat: userProfileData.address,
+      });
+
+      // Update imageUrl based on the user's profile picture
+      // console.log(userProfileData.profile_pic);
+      setImageUrl(userProfileData.profile_pic);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      if (error.response) {
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data);
+      }
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,18 +62,44 @@ const UserProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedImage(file);
+    setImageUrl(URL.createObjectURL(file));
   };
 
   const handleToggleEdit = () => {
     setIsEditing((prevIsEditing) => !prevIsEditing);
   };
 
-  const handleSaveProfile = () => {
-    console.log("Data yang disimpan:", userData);
-    if (selectedImage) {
-      console.log("New image:", selectedImage);
+  const handleSaveProfile = async (event) => {
+    try {
+      event.preventDefault();
+      const token = localStorage.getItem("token");
+
+      const commonHeaders = {
+        authorization: `${token}`,
+      };
+
+      const formData = new FormData();
+      formData.append("user_name", userData.nama);
+      formData.append("phone_number", userData.nomorHp);
+      formData.append("address", userData.alamat);
+      // Append image
+      if (selectedImage) {
+        formData.append("image", selectedImage);
+      }
+
+      await axios.patch(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
+        formData,
+        {
+          headers: commonHeaders,
+        }
+      );
+
+      setIsEditing(false);
+      fetchUserProfile(); // Fetch updated profile after saving changes
+    } catch (error) {
+      console.error("Error saving profile:", error);
     }
-    setIsEditing(false);
   };
 
   return (
@@ -54,7 +117,7 @@ const UserProfile = () => {
                 <input
                   type="text"
                   name="nama"
-                  value={userData.nama}
+                  value={userData.nama || ""}
                   onChange={handleChange}
                   className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
@@ -70,7 +133,7 @@ const UserProfile = () => {
                 <input
                   type="email"
                   name="email"
-                  value={userData.email}
+                  value={userData.email || ""}
                   onChange={handleChange}
                   className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
@@ -81,12 +144,12 @@ const UserProfile = () => {
               )}
             </div>
             <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">Email</label>
+              <label className="block text-gray-600 w-1/4">No Hp</label>
               {isEditing ? (
                 <input
                   type="tel"
                   name="nomorHp"
-                  value={userData.nomorHp}
+                  value={userData.nomorHp || ""}
                   onChange={handleChange}
                   className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
@@ -101,7 +164,7 @@ const UserProfile = () => {
               {isEditing ? (
                 <textarea
                   name="alamat"
-                  value={userData.alamat}
+                  value={userData.alamat || ""}
                   onChange={handleChange}
                   className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
@@ -133,11 +196,7 @@ const UserProfile = () => {
                   </>
                 ) : (
                   <img
-                    src={
-                      selectedImage
-                        ? URL.createObjectURL(selectedImage)
-                        : userImage
-                    }
+                    src={imageUrl}
                     alt="User Image"
                     className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mr-4"
                   />

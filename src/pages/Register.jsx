@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
 import "../components/component.css";
 import "../App.css";
@@ -8,14 +9,62 @@ import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
 
 const Register = () => {
-  const [name, setName] = useState("");
+  const navigate = useNavigate();
+  const [user_name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreement, setAgreement] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleRegister = () => {
-    console.log("Registering...");
+  const handleRegister = async (event) => {
+    event.preventDefault(); // Mencegah perilaku bawaan form
+    console.log("Handle Register function dipanggil");
+
+    try {
+      if (password !== confirmPassword) {
+        setError("Password dan konfirmasi password tidak cocok");
+        return;
+      }
+
+      console.log("Sending registration request...");
+
+      const response = await axios.post(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/register",
+        {
+          user_name,
+          email,
+          password,
+        }
+      );
+
+      console.log("Registration response:", response);
+
+      const data = response.data;
+
+      if (response.status !== 201) {
+        throw new Error(data.error || "Gagal mendaftar");
+      }
+
+      console.log("Registration successful. Received data:", data);
+
+      // Menyimpan token ke localStorage
+      localStorage.setItem("token", data.token);
+
+      console.log("Token stored in localStorage.");
+
+      // Reset form
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setAgreement(false);
+      setError(null);
+      navigate("/sell/profile");
+    } catch (error) {
+      console.error("Error registering:", error);
+      setError(error.message || "Gagal mendaftar");
+    }
   };
 
   return (
@@ -63,6 +112,7 @@ const Register = () => {
                   type="text"
                   placeholder="Nama"
                   className="mt-1 p-2 w-full border rounded-md"
+                  value={user_name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -71,6 +121,7 @@ const Register = () => {
                   type="email"
                   placeholder="Email"
                   className="mt-1 p-2 w-full border rounded-md"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
@@ -79,6 +130,7 @@ const Register = () => {
                   type="password"
                   placeholder="Kata sandi"
                   className="mt-1 p-2 w-full border rounded-md"
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
@@ -87,6 +139,7 @@ const Register = () => {
                   type="password"
                   placeholder="Konfirmasi Sandi"
                   className="mt-1 p-2 w-full border rounded-md"
+                  value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
@@ -101,6 +154,7 @@ const Register = () => {
                   Saya menyetujui syarat dan ketentuan yang berlaku
                 </label>
               </div>
+              {error && <p className="text-red-500">{error}</p>}
               <button
                 className="w-full btn-green py-1.5 font-medium rounded text-white"
                 onClick={handleRegister}
