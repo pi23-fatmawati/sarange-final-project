@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import ButtonGreen from "./Button-green";
 import ButtonOutline from "./Button-outline";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/actions/cartActions";
 
 function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
   const dispatch = useDispatch();

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
@@ -7,24 +8,25 @@ import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
+import { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm } from "../redux/slice/register-slice";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [user_name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [agreement, setAgreement] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { user_name, email, password, confirm_password, agreement, error } = useSelector((state) => state.register);
 
   const handleRegister = async (event) => {
     event.preventDefault(); // Mencegah perilaku bawaan form
     console.log("Handle Register function dipanggil");
 
     try {
-      if (password !== confirmPassword) {
-        setError("Password dan konfirmasi password tidak cocok");
+      console.log("Password:", password);
+console.log("Confirm Password:", confirm_password);
+      if (password !== confirm_password) {
+        dispatch(setError('Password dan konfirmasi password tidak cocok'));
         return;
+      } else {
+        console.log('password cocok');
       }
 
       console.log("Sending registration request...");
@@ -54,16 +56,11 @@ const Register = () => {
       console.log("Token stored in localStorage.");
 
       // Reset form
-      setName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setAgreement(false);
-      setError(null);
+      dispatch(resetForm())
       navigate("/sell/profile");
     } catch (error) {
       console.error("Error registering:", error);
-      setError(error.message || "Gagal mendaftar");
+      dispatch(setError(error.message || "Gagal mendaftar"));
     }
   };
 
@@ -113,7 +110,7 @@ const Register = () => {
                   placeholder="Nama"
                   className="mt-1 p-2 w-full border rounded-md"
                   value={user_name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => dispatch(setName(e.target.value))}
                 />
               </div>
               <div className="mb-4">
@@ -122,7 +119,7 @@ const Register = () => {
                   placeholder="Email"
                   className="mt-1 p-2 w-full border rounded-md"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => dispatch(setEmail(e.target.value))}
                 />
               </div>
               <div className="mb-4">
@@ -131,7 +128,7 @@ const Register = () => {
                   placeholder="Kata sandi"
                   className="mt-1 p-2 w-full border rounded-md"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => dispatch(setPassword(e.target.value))}
                 />
               </div>
               <div className="mb-4">
@@ -139,8 +136,8 @@ const Register = () => {
                   type="password"
                   placeholder="Konfirmasi Sandi"
                   className="mt-1 p-2 w-full border rounded-md"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={confirm_password}
+                  onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
                 />
               </div>
               <div className="mb-4 flex items-center">
@@ -148,7 +145,7 @@ const Register = () => {
                   type="checkbox"
                   className="mr-2"
                   checked={agreement}
-                  onChange={() => setAgreement(!agreement)}
+                  onChange={() => dispatch(setAgreement(!agreement))}
                 />
                 <label className="text-sm font-medium text-gray-600">
                   Saya menyetujui syarat dan ketentuan yang berlaku
