@@ -6,14 +6,26 @@ import ButtonGreen from "./Button-green";
 import ButtonOutline from "./Button-outline";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/actions/cartActions";
+import SuccessModal from "./SuccessModal";
+import { useEffect, useState } from "react";
 
 function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
   const dispatch = useDispatch();
+  const [successModal, setSuccessModal] = useState(false);
   const addToCartHandler = () => {
     const product = { id, imgSrc, imgAlt, title, coin };
     dispatch(addToCart(product));
-    console.log("Masukkan Keranjang button clicked:", product);
   };
+  useEffect(() => {
+    let timeout;
+
+    if (successModal) {
+      timeout = setTimeout(() => {
+        setSuccessModal(false);
+      }, 1500);
+    }
+    return () => clearTimeout(timeout);
+  }, [successModal]);
   return (
     <Card
       className="w-64 hover:border-green-2 product-card"
@@ -25,11 +37,22 @@ function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
         <FontAwesomeIcon icon={faCoins} /> {coin} koin per kg.
       </div>
       <div className="buttons flex flex-col gap-2">
-        <ButtonGreen text="Masukkan Keranjang" onClick={addToCartHandler} />
+        <ButtonGreen
+          text="Masukkan Keranjang"
+          onClick={() => {
+            addToCartHandler();
+            setSuccessModal(true);
+          }}
+        />
         <Link to={`/sell/products/${id}`}>
           <ButtonOutline text="Detail" />
         </Link>
       </div>
+      <SuccessModal
+        show={successModal}
+        onClose={() => setSuccessModal(false)}
+        header="Produk berhasil ditambahkan ke keranjang"
+      />
     </Card>
   );
 }
