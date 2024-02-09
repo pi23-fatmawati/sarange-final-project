@@ -4,19 +4,26 @@ import { Card } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import BackNavigation from "../components/BackNavigation";
+import React from "react";
 
 function ProductDetail() {
   const { id } = useParams();
-  const [product, setProducts] = useState(null);
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
       try {
+        const token = localStorage.getItem("token"); // Ambil token dari local storage
         const response = await fetch(
-          `https://656bda9ee1e03bfd572ddc89.mockapi.io/sarange/listSampah/${id}`
+          `https://final-sarange-eff62c954ab5.herokuapp.com/product/${id}`,
+          {
+            headers: {
+              authorization: `${token}`, // Sertakan token dalam header Authorization
+            },
+          }
         );
         const data = await response.json();
-        setProducts(data);
+        setProduct(data);
       } catch (err) {
         console.error(err);
       }
@@ -31,27 +38,30 @@ function ProductDetail() {
       </div>
     );
   }
+
   return (
     <>
       <div className="container-page">
         <BackNavigation page="Jual Sampah" />
         <Card
           className="detail-card md:max-w-full gap-3"
-          imgSrc={product.img}
+          imgSrc={product.product_pic}
           horizontal
         >
-          <h5 className="text-2xl font-medium">{product.nama}</h5>
+          <h5 className="text-2xl font-medium">{product.product_name}</h5>
           <h4 className="text-2xl font-bold text-green-2">
-            <FontAwesomeIcon icon={faCoins} /> {product.koin} koin
+            <FontAwesomeIcon icon={faCoins} /> {product.coin} koin
           </h4>
-          <ul>
+          <p>
             <b>Ketentuan:</b>
-            {product.deskripsi.map((item) => (
-              <li key={id} className="list-disc">
-                {item}
-              </li>
+            <br />
+            {product.description.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
             ))}
-          </ul>
+          </p>
         </Card>
       </div>
     </>
