@@ -1,41 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, setEmail, setError, setPassword, setRememberMe } from "../redux/slice/login-slice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const dispatch = useDispatch();
+  const { email, password, rememberMe, error } = useSelector((state) => state.login)
 
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log("Handle Login function dipanggil");
-    try {
-      const response = await axios.post(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/login",
-        {
-          email: email,
-          password: password,
-        }
-      );
-
-      // Tangani respons dari server
-      const { token } = response.data;
-
-      // Simpan token ke dalam local storage atau session storage
-      localStorage.setItem("token", token);
-
-      console.log("Login berhasil. Token:", token);
-      navigate("/sell/home");
-    } catch (error) {
-      console.error("Error logging in:", error);
-    }
+    dispatch(loginUser({ email, password }))
+      .then(() => {
+        navigate("/sell/home");
+      })
+      .catch((error) => {
+        console.error('error', error);
+      })
+      
   };
 
   return (
@@ -83,7 +71,7 @@ const Login = () => {
                   type="email"
                   placeholder="Email"
                   className="mt-1 p-2 w-full border rounded-md"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => dispatch(setEmail(e.target.value))}
                 />
               </div>
               <div className="mb-4">
@@ -91,7 +79,7 @@ const Login = () => {
                   type="password"
                   placeholder="Kata sandi"
                   className="mt-1 p-2 w-full border rounded-md"
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => dispatch(setPassword(e.target.value))}
                 />
               </div>
               <div className="mb-4 flex items-center">
@@ -99,12 +87,13 @@ const Login = () => {
                   type="checkbox"
                   className="mr-2"
                   checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
+                  onChange={(e) => dispatch(setRememberMe(e.target.checked))}
                 />
                 <label className="text-sm font-medium text-gray-600">
                   Ingatkan saya
                 </label>
               </div>
+                {error && <p className="text-red-500">{error}</p>}
               <div className="mb-4">
                 <button
                   className="w-full btn-green py-1.5 font-medium rounded text-white"

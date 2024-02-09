@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Profile from "../assets/profile.png";
 import ButtonOutline from "./Button-outline";
 import ButtonGreen from "./Button-green";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../redux/slice/auth-slice";
+import Cookies from "js-cookie";
 
 export default function NavbarSarange() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -11,6 +14,17 @@ export default function NavbarSarange() {
   const [clickedLink, setClickedLink] = useState("Beranda");
   const navigate = useNavigate();
   const profileButtonRef = useRef(null);
+  const dispatch = useDispatch();
+  
+  const handleLogout = () => {
+    dispatch(logoutUser())
+    .then(() => {
+      navigate("/sell/login");
+    })
+    .catch((error) => {
+      console.error('error', error);
+    })
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -89,9 +103,9 @@ export default function NavbarSarange() {
             </div>
             <div className="button-popup-profile mx-4 flex flex-col gap-2 p-4">
               <Link to="/sell/profile">
-                <ButtonGreen text="Lihat Profile"></ButtonGreen>
+                <ButtonGreen text="Lihat Profile" onClick={() => navigate('/profile')}></ButtonGreen>
               </Link>
-              <ButtonOutline text="Logout"></ButtonOutline>
+              <ButtonOutline text="Logout" onClick={handleLogout}></ButtonOutline>
             </div>
           </div>
           <button

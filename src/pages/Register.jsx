@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
 import "../components/component.css";
@@ -8,7 +7,7 @@ import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
-import { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm } from "../redux/slice/register-slice";
+import { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm, registerUser } from "../redux/slice/register-slice";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,52 +15,16 @@ const Register = () => {
   const { user_name, email, password, confirm_password, agreement, error } = useSelector((state) => state.register);
 
   const handleRegister = async (event) => {
-    event.preventDefault(); // Mencegah perilaku bawaan form
+    event.preventDefault();
     console.log("Handle Register function dipanggil");
 
-    try {
-      console.log("Password:", password);
-console.log("Confirm Password:", confirm_password);
-      if (password !== confirm_password) {
-        dispatch(setError('Password dan konfirmasi password tidak cocok'));
-        return;
-      } else {
-        console.log('password cocok');
-      }
-
-      console.log("Sending registration request...");
-
-      const response = await axios.post(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/register",
-        {
-          user_name,
-          email,
-          password,
-        }
-      );
-
-      console.log("Registration response:", response);
-
-      const data = response.data;
-
-      if (response.status !== 201) {
-        throw new Error(data.error || "Gagal mendaftar");
-      }
-
-      console.log("Registration successful. Received data:", data);
-
-      // Menyimpan token ke localStorage
-      localStorage.setItem("token", data.token);
-
-      console.log("Token stored in localStorage.");
-
-      // Reset form
-      dispatch(resetForm())
-      navigate("/sell/profile");
-    } catch (error) {
-      console.error("Error registering:", error);
-      dispatch(setError(error.message || "Gagal mendaftar"));
-    }
+    dispatch(registerUser({ user_name, email, password }))
+      .then(() => {
+        navigate("/sell/profile")
+      })
+      .catch((error) => {
+        console.error("error registering", error);
+      })
   };
 
   return (
