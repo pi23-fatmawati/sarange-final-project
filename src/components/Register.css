@@ -1,0 +1,27 @@
+.container-register {
+  margin-top: 40px;
+}
+
+.shopping-img {
+  max-width: 450px;
+  height: auto;
+  width: 100%;
+}
+
+.container-regis {
+  margin-left: 150px;
+}
+
+@media screen and (max-width: 767px) {
+  .shopping-img {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .container-regis {
+    margin-left: 0px;
+  }
+}

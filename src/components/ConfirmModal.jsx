@@ -20,10 +20,12 @@ export default function ConfirmModal({
             <h3 className="mb-2 text-lg font-medium">{header}</h3>
             <p>{content}</p>
           </div>
-          <div className="flex justify-center gap-4">
-            <ButtonGreen text="Ya" onConfirm={onConfirm} />
-            <ButtonOutline text="Kembali" width="w-max" onClose={onClose} />
-          </div>
+          {onConfirm && onClose && (
+            <div className="flex justify-center gap-4">
+              <ButtonGreen text="Ya" onConfirm={onConfirm} />
+              <ButtonOutline text="Kembali" width="w-max" onClose={onClose} />
+            </div>
+          )}
         </div>
       </Modal.Body>
     </Modal>
