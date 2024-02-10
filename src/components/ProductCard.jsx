@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import ButtonGreen from "./Button-green";
 import ButtonOutline from "./Button-outline";
 import { useDispatch } from "react-redux";
-// import { addToCart } from "../redux/actions/cartActions";
 import { addCart } from "../redux/slice/cart-slice";
 import SuccessModal from "./SuccessModal";
 import { useEffect, useState } from "react";
@@ -13,10 +12,7 @@ import { useEffect, useState } from "react";
 function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
   const dispatch = useDispatch();
   const [successModal, setSuccessModal] = useState(false);
-  const addToCartHandler = () => {
-    const product = { id, imgSrc, imgAlt, title, coin };
-    dispatch(addToCart(product));
-  };
+
   useEffect(() => {
     let timeout;
 
@@ -25,8 +21,15 @@ function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
         setSuccessModal(false);
       }, 1500);
     }
+
     return () => clearTimeout(timeout);
   }, [successModal]);
+
+  const handleAddToCart = () => {
+    setSuccessModal(true);
+    dispatch(addCart(id));
+  };
+
   return (
     <Card
       className="w-64 hover:border-green-2 product-card"
@@ -40,10 +43,7 @@ function ProductCard({ id, imgSrc, imgAlt, title, coin }) {
       <div className="buttons flex flex-col gap-2">
         <ButtonGreen
           text="Masukkan Keranjang"
-          onClick={() => {
-            addCart();
-            setSuccessModal(true);
-          }}
+          onClick={handleAddToCart}
         />
         <Link to={`/sell/products/${id}`}>
           <ButtonOutline text="Detail" />

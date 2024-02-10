@@ -50,7 +50,6 @@ export default function HomePage() {
         coin: userProfileData.coin_user,
       });
       setLoading(false);
-      console.log(userProfileData)
     } catch (error) {
       console.error("Error fetching user profile:", error);
       if (error.response) {

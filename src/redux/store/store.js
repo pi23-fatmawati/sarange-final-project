@@ -7,7 +7,8 @@ import productReducer from "../slice/product-slice";
 const store = configureStore({
   reducer: {
     cart: cartReducer,
-    user: userReducer,
+    user: userReducer.user,
+    user_basic_info: userReducer.user_basic_info,
     product: productReducer,
     register: registerReducer,
   },

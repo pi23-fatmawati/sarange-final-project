@@ -7,8 +7,10 @@ import InputProfile from "../components/InputProfile";
 import "../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import SuccessModal from "../components/SuccessModal";
 
 const UserProfile = () => {
+  const [successModal, setSuccessModal] = useState(false);
   const [userData, setUserData] = useState({
     nama: "",
     email: "",
@@ -98,13 +100,13 @@ const UserProfile = () => {
       );
 
       setIsEditing(false);
+      setSuccessModal(true);
       fetchUserProfile();
     } catch (error) {
       console.error("Error saving profile:", error);
     }
   };
   const handleDeletePhoto = () => {
-    console.log("Photo deleted");
     setSelectedImage(null);
     setImageUrl(null);
   };
@@ -225,14 +227,23 @@ const UserProfile = () => {
               <ButtonOutline
                 text="Kembali"
                 width="w-max"
+                onClick={() => setIsEditing(false)}
               />
-              <ButtonGreen onClick={handleSaveProfile} text="Simpan" />
+              <ButtonGreen
+                onClick={handleSaveProfile}
+                text="Simpan"
+              />
             </div>
           ) : (
             <ButtonGreen onClick={handleToggleEdit} text="Edit Profil" />
           )}
         </div>
       </div>
+      <SuccessModal
+        show={successModal}
+        onClose={() => setSuccessModal(false)}
+        header="Berhasil Disimpan"
+      />
     </div>
   );
 };

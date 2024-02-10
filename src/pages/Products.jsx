@@ -1,19 +1,22 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux"; // Tambahkan impor
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
 import HeaderPage from "../components/HeaderPage";
-import { getProduct } from "../redux/slice/product-slice"; // Tambahkan impor
+import { getProduct } from "../redux/slice/product-slice";
+import { getUserBasicInfo } from "../redux/slice/user-slice";
 
 function Product() {
-  const dispatch = useDispatch(); // Dapatkan fungsi dispatch
-  const products = useSelector((state) => state.product.product); // Ambil produk dari store
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.product);
+  const userBasicInfo = useSelector((state) => state.user_basic_info);
 
   useEffect(() => {
-    dispatch(getProduct()); // Memuat produk saat komponen dimuat
+    dispatch(getProduct());
+    dispatch(getUserBasicInfo());
   }, [dispatch]);
 
-  if (products.length === 0) {
+  if (products.length === 0 || !userBasicInfo) {
     return (
       <div className="container-page flex justify-center items-center">
         Loading...
@@ -24,7 +27,7 @@ function Product() {
     <>
       <div className="container-page flex flex-col gap-4 w-full">
         <HeaderPage
-          title="Hai user, mau jual apa hari ini?"
+          title={`Hai ${userBasicInfo.data.user_name}, mau jual apa hari ini?`}
           subtitle="Yuk, jaga bumi dan dapatkan koin dari setiap penjualan sampahmu!"
         />
         <div className="flex flex-wrap w-full justify-center gap-5 items-start">
