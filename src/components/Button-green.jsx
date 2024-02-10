@@ -5,7 +5,7 @@ export default function ButtonGreen({
   onClick,
   onConfirm,
   padding,
-  width
+  width,
 }) {
   const handleClick = (e) => {
     if (onConfirm) {
@@ -14,7 +14,9 @@ export default function ButtonGreen({
       onClick(e);
     }
   };
-  const buttonClasses = `btn-green py-1.5 ${padding || 'px-7'} font-normal rounded-lg text-white ${width} || 'w-full'`;
+  const buttonClasses = `btn-green py-1.5 ${
+    padding || "px-7"
+  } font-normal rounded-lg text-white ${width} || 'w-full'`;
   return (
     <button
       className={buttonClasses}

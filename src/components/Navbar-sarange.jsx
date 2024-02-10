@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from "react";
-import Logo from "../assets/full-logo-sarange.svg";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Profile from "../assets/profile.png";
+import Logo from "../assets/full-logo-sarange.svg";
 import ButtonOutline from "./Button-outline";
 import ButtonGreen from "./Button-green";
 
@@ -11,22 +11,28 @@ export default function NavbarSarange() {
   const [clickedLink, setClickedLink] = useState("Beranda");
   const navigate = useNavigate();
   const profileButtonRef = useRef(null);
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileButtonRef.current &&
-        !profileButtonRef.current.contains(event.target)
-      ) {
-        setIsProfileOpen(false);
+    async function fetchProfilePic() {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
+          {
+            headers: {
+              authorization: `${token}`,
+            },
+          }
+        );
+        const userProfileData = response.data.user;
+        setProfilePic(userProfileData.profile_pic);
+      } catch (error) {
+        console.error("Error fetching profile pic:", error);
       }
-    };
+    }
 
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    fetchProfilePic();
   }, []);
 
   const toggleNavbar = () => {
@@ -68,7 +74,7 @@ export default function NavbarSarange() {
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={Profile}
+              src={profilePic}
               alt="user photo"
             />
           </button>

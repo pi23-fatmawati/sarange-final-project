@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import userImage from "../pic/profilepic0.png";
 import axios from "axios";
 import ButtonGreen from "../components/Button-green";
 import ButtonOutline from "../components/Button-outline";
@@ -43,6 +42,7 @@ const UserProfile = () => {
         nomorHp: userProfileData.phone_number,
         alamat: userProfileData.address,
       });
+      setImageUrl(userProfileData.profile_pic);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -222,10 +222,7 @@ const UserProfile = () => {
         >
           {isEditing ? (
             <div className="buttons flex gap-4">
-              <ButtonOutline
-                text="Kembali"
-                width="w-max"
-              />
+              <ButtonOutline text="Kembali" width="w-max" />
               <ButtonGreen onClick={handleSaveProfile} text="Simpan" />
             </div>
           ) : (
