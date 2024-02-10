@@ -5,12 +5,12 @@ import Cookies from "js-cookie";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: {},
+    data: {},
     isLoading: false,
   },
   reducers: {
     getUserSuccess(state, action) {
-      state.user = action.payload.data;
+      state.data = action.payload.data.user;
       state.isLoading = false;
     },
   },
@@ -23,14 +23,18 @@ export const getUser = () => {
     try {
       const token = Cookies.get("token");
       const response = await axios.get(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+        "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
         {
           headers: {
             authorization: `${token}`,
           },
         }
       );
-      dispatch(getUserSuccess({ data: response.data.user }));
+      if (response.data && response.data.user) {
+        dispatch(getUserSuccess({ data: { user: response.data.user } }));
+      } else {
+        console.error("Invalid response data:", response.data);
+      }
     } catch (error) {
       console.error("Get user failed:", error);
     }

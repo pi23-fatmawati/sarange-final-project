@@ -64,14 +64,22 @@ export const loginUser = (userData) => async (dispatch) => {
     );
 
     const data = response.data;
-    if (response.status === 200) {
-      const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 12);
-      Cookies.set("token", data.token, { expires: expirationTime });
-    }
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 12);
+    Cookies.set("token", data.token, { expires: expirationTime });
     dispatch(resetLoginForm());
+    return response;
   } catch (error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.status === 401
+    ) {
+      dispatch(setError("Email atau password salah"));
+    } else {
       dispatch(setError("Error saat mencoba masuk"));
+    }
+    console.log(error);
   } finally {
     dispatch(finishLoading());
   }

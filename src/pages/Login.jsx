@@ -17,7 +17,6 @@ import {
 import ButtonGreen from "../components/Button-green";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,22 +30,18 @@ const Login = () => {
     dispatch(clearError());
     try {
       if (!email || !password) {
-        dispatch(setError("Email dan Password harus diisi"));
+        dispatch(setError("Email dan password harus diisi"));
         return;
       }
-      dispatch(loginUser({ email, password }));
-      navigate("/sell/home");
-    } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        error.response &&
-        error.response.status === 401
-      ) {
-        dispatch(setError("Email atau password salah"));
+      const response = await dispatch(loginUser({ email, password }));
+      if (response.status === 200) {
+        navigate("/sell/home");
       }
+    } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     return () => {
       dispatch(clearError());

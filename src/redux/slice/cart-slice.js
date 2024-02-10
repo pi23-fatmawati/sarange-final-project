@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -65,7 +66,7 @@ export const {
 export const addCart = (id_product) => {
   return async (dispatch) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await axios.post(
         "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
         { id_product },
@@ -87,7 +88,7 @@ export const addCart = (id_product) => {
 export const updateCart = () => {
   return async (dispatch) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await axios.get(
         "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
         {
@@ -109,7 +110,7 @@ export const updateCart = () => {
 export const deleteCart = (id_cart) => {
   return async (dispatch) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       await axios.delete(
         `https://final-sarange-eff62c954ab5.herokuapp.com/cart/${id_cart}`,
         {
@@ -134,7 +135,7 @@ const calculateTotalProducts = (carts) => {
 export const updateCartData = () => {
   return async (dispatch, getState) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const { cartItems, selectedItems } = getState().cart;
 
       const updatedCartItems = await Promise.all(

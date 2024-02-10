@@ -15,7 +15,7 @@ const Navbar = () => {
         >
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </Link>
-        <Link to={"/Contact"}>
+        <Link to={"/Contact"} target="_blank">
           <p style={{ color: "#52C41A" }}>Butuh bantuan?</p>
         </Link>
       </div>

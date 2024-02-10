@@ -5,8 +5,6 @@ import Image1 from "../assets/carousel-1.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import axios from "axios";
-import { getUserSuccess } from "../redux/slice/user-slice";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserBasicInfo } from "../redux/slice/user-slice";
 
@@ -26,10 +24,10 @@ export default function HomePage() {
     return () => clearInterval(slideInterval);
   }, []);
 
+  const dispatch = useDispatch();
   const { data: userData, isLoading } = useSelector(
     (state) => state.user_basic_info
   );
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUserBasicInfo());
@@ -46,7 +44,7 @@ export default function HomePage() {
         </div>
         <div className="text-home flex flex-col gap-1 container mx-auto absolute text-center justify-center items-center w-full right-0 left-0 mt-5">
           <p className="text-xl font-medium">
-            Hai {userData.nama || "User"}! Terima kasih, ya
+            Hai {userData.user_name || "User"}! Terima kasih, ya
           </p>
           <h1 className="text-3xl font-bold py-1">
             10kg CO<sub>2</sub>
@@ -69,7 +67,7 @@ export default function HomePage() {
           <img src={Coin} className="w-auto max-h-12" alt="coin image" />
           <h1 className="font-semibold text-xl">
             {userData.coin !== null && userData.coin !== undefined
-              ? `${userData.coin} Koin`
+              ? `${userData.coin_user} Koin`
               : "0 Koin"}
           </h1>
         </Link>

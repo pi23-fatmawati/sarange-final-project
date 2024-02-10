@@ -4,6 +4,7 @@ import { useState } from "react";
 import "./component.css";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import ButtonGreen from "./Button-green";
 
 export default function NavbarLandingPage() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -28,11 +29,11 @@ export default function NavbarLandingPage() {
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </HashLink>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Link to="/login">
-            <Button
+          <Link to="/login" target="_blank">
+            <ButtonGreen
               className="focus:ring-4 focus:outline-none font-medium text-sm px-4 py-2 text-center"
               text="Login Sarange"
-            ></Button>
+            />
           </Link>
           <button
             data-collapse-toggle="navbar-sticky"

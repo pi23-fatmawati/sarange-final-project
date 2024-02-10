@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // import userImage from "../pic/profilepic0.png";
 import axios from "axios";
 import Cookies from "js-cookie";
-import InputProfile from "../components/InputProfile"
+import InputProfile from "../components/InputProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonGreen from "../components/Button-green";
 import ButtonOutline from "../components/Button-outline";
@@ -16,15 +16,12 @@ const UserProfile = () => {
     email: "",
     nomorHp: "",
     alamat: "",
+    profile_pic: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState();
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
 
   const fetchUserProfile = async () => {
     try {
@@ -44,6 +41,7 @@ const UserProfile = () => {
         email: userProfileData.email,
         nomorHp: userProfileData.phone_number,
         alamat: userProfileData.address,
+        profile_pic: userProfileData.profile_pic,
       });
       setLoading(false);
     } catch (error) {
@@ -86,7 +84,6 @@ const UserProfile = () => {
       formData.append("user_name", userData.nama);
       formData.append("phone_number", userData.nomorHp);
       formData.append("address", userData.alamat);
-      // Append image
       if (selectedImage) {
         formData.append("image", selectedImage);
       }
@@ -101,15 +98,23 @@ const UserProfile = () => {
 
       setIsEditing(false);
       setSuccessModal(true);
-      fetchUserProfile();
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        profile_pic: imageUrl,
+      }));
     } catch (error) {
       console.error("Error saving profile:", error);
     }
   };
+
   const handleDeletePhoto = () => {
     setSelectedImage(null);
     setImageUrl(null);
   };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
   if (loading) {
     return <div className="container-page text-center">Loading...</div>;
@@ -210,7 +215,7 @@ const UserProfile = () => {
                 </div>
               ) : (
                 <img
-                  src={imageUrl === undefined ? "Belum ada gambar" : imageUrl}
+                  src={userData.profile_pic}
                   alt="User Image"
                   className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mr-4"
                 />

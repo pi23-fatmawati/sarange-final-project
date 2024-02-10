@@ -24,24 +24,51 @@ import ConfirmModal from "../components/ConfirmModal";
 const Register = () => {
   const [openModal, setOpenModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user_name, email, password, confirm_password, agreement, error } =
+  const { user_name, email, password, confirm_password, agreement, error, loading } =
     useSelector((state) => state.register);
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    console.log("Handle Register function dipanggil");
-
-    dispatch(registerUser({ user_name, email, password }))
-      .then(() => {
-        navigate("/sell/profile");
-      })
-      .catch((error) => {
-        console.error("error registering", error);
-      });
-  };
+    const handleRegister = async (event) => {
+      event.preventDefault();
+    
+      try {
+        if (!user_name || !email || !password || !confirm_password) {
+          dispatch(setError("Semua kolom harus diisi"));
+          return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          dispatch(setError("Format email tidak valid"));
+          return;
+        }
+        if (password !== confirm_password) {
+          dispatch(setError("Password dan konfirmasi password harus sama"));
+          return;
+        }
+        if (!agreement) {
+          dispatch(setError("Harap setujui syarat dan ketentuan yang berlaku"));
+          return;
+        }
+        const response = await dispatch(
+          registerUser({
+            user_name,
+            email,
+            password,
+            confirm_password,
+            agreement,
+          })
+        );
+        if (response && response.status === 201) {
+          navigate("/sell/profile");
+          setSuccessModal(true);
+          resetForm();
+        }
+      } catch (error) {
+        console.log(error);
+      } 
+    };
+    
   useEffect(() => {
     if (successModal) {
       const timer = setTimeout(() => {
