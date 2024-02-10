@@ -7,6 +7,7 @@ import ButtonGreen from "./Button-green";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slice/auth-slice";
+import profilePicture from '../assets/profile.png'
 
 export default function NavbarSarange() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -99,7 +100,7 @@ export default function NavbarSarange() {
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={profilePic}
+              src={profilePicture}
               alt="user photo"
             />
           </button>
