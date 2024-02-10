@@ -19,7 +19,7 @@ const BottomNav = () => {
 
   const handlePickUpButton = async () => {
     await dispatch(updateCartData());
-    navigate("sell/pick-up")
+    navigate("/sell/pick-up")
   };
 
 

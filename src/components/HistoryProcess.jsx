@@ -7,7 +7,7 @@ import ButtonOutline from "./Button-outline";
 import { Link } from "react-router-dom";
 
 const HistoryProcess = () => {
-  const itemsPerPage = 2; //banyak data yang tampil tiap page
+  const itemsPerPage = 10; //banyak data yang tampil tiap page
   const [currentPage, setCurrentPage] = useState(1);
 
   const transactionData = [
@@ -57,7 +57,6 @@ const HistoryProcess = () => {
           <thead className="font-medium text-center text-s text-white uppercase bg-green-2">
             <tr>
               <th className="px-6 py-4">Tanggal Transaksi</th>
-              <th className="px-6 py-4">Waktu Penjemputan</th>
               <th className="px-6 py-4">Produk</th>
               <th className="px-6 py-4">Koin</th>
               <th className="px-6 py-4">Status</th>
@@ -71,7 +70,6 @@ const HistoryProcess = () => {
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
               >
                 <td className="px-6 py-4">{transaction.tanggalTransaksi}</td>
-                <td className="px-6 py-4">{transaction.waktuPenjemputan}</td>
                 <td className="px-6 py-4">{transaction.produk}</td>
                 <td className="px-6 py-4">{transaction.koin}</td>
                 <td className="px-6 py-4">

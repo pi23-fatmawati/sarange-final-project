@@ -23,6 +23,9 @@ const productSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    clearProductDetail(state) {
+      state.productDetail = null;
+    },
   },
 });
 

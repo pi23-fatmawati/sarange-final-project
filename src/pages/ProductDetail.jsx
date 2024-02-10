@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../redux/slice/product-slice";
 import { Card, List, ListItem } from "flowbite-react";

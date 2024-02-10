@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import userImage from "../pic/profilepic0.png";
 import axios from "axios";
 import Cookies from "js-cookie";
 import InputProfile from "../components/InputProfile";
@@ -43,6 +42,7 @@ const UserProfile = () => {
         alamat: userProfileData.address,
         profile_pic: userProfileData.profile_pic,
       });
+      setImageUrl(userProfileData.profile_pic);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
