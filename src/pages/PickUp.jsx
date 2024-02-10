@@ -175,6 +175,7 @@ export default function PickUp() {
           dataModalTrigger
           onClick={handleSchedulePickup}
           disabled={loadingTransaction}
+          link="/sell/transactions"
         />
       </div>
       {/* <ConfirmModal
