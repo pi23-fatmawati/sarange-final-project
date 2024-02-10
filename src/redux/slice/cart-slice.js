@@ -131,4 +131,40 @@ const calculateTotalProducts = (carts) => {
   return carts.reduce((total, cartItem) => total + cartItem.quantity, 0);
 };
 
+export const updateCartData = () => {
+  return async (dispatch, getState) => {
+    try {
+      const token = localStorage.getItem("token");
+      const { cartItems, selectedItems } = getState().cart;
+
+      const updatedCartItems = await Promise.all(
+        cartItems.map(async (cartItem) => {
+          const { id_cart, total_product, is_check } = cartItem;
+          if (selectedItems[id_cart]) {
+            const response = await axios.patch(
+              "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
+              { id_cart, total_product, is_check },
+              {
+                headers: {
+                  authorization: `${token}`,
+                },
+              }
+            );
+            const { updatedCartItem } = response.data;
+
+            dispatch(updateCart(updatedCartItem));
+          } else {
+            dispatch(updateCart(cartItem));
+          }
+
+          return cartItem;
+        })
+      );
+      dispatch(updateCartSuccess(updatedCartItems));
+    } catch (error) {
+      console.error("Error updating cart data, ", error);
+    }
+  };
+};
+
 export default cartSlice.reducer;

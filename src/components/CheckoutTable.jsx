@@ -14,8 +14,9 @@ const CheckoutTable = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const products = useSelector((state) => state.product.product);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({});
   const [selectAllChecked, setSelectAllChecked] = useState(false);
+  const [selectedItems, setSelectedItems] = useState({});
 
   const handleIncrement = (id_cart) => {
     dispatch(incrementCartItem(id_cart));
@@ -54,12 +55,34 @@ const CheckoutTable = () => {
 
   const handleCheckAll = () => {
     setSelectAllChecked((prev) => !prev);
+    setSelectedItems((prevSelectedItems) => {
+      const updatedSelectedItems = {};
+      const allItemIds = cartItems.map((item) => item.id_cart);
+
+      if (!selectAllChecked) {
+        allItemIds.forEach((id) => {
+          updatedSelectedItems[id] = true;
+        });
+      }
+
+      return updatedSelectedItems;
+    });
+  };
+
+  const handleItemCheck = (id_cart) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [id_cart]: !prevState[id_cart],
+    }));
   };
 
   useEffect(() => {
     dispatch(updateCart());
     dispatch(getProduct());
   }, [dispatch]);
+  const isCartItemChecked = (id_cart) => {
+    return selectedItems[id_cart] || false;
+  };
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-24">
@@ -91,7 +114,8 @@ const CheckoutTable = () => {
                   <input
                     type="checkbox"
                     className="form-checkbox"
-                    checked={selectAllChecked}
+                    checked={isCartItemChecked(cartItem.id_cart)}
+                    onChange={() => handleItemCheck(cartItem.id_cart)}
                   />
                 </td>
                 <td className="px-6 py-3 whitespace-nowrap">
@@ -159,5 +183,4 @@ const CheckoutTable = () => {
     </div>
   );
 };
-
 export default CheckoutTable;
