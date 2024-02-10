@@ -6,7 +6,6 @@ import ButtonOutline from "./Button-outline";
 import ButtonGreen from "./Button-green";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slice/auth-slice";
-import Cookies from "js-cookie";
 
 export default function NavbarSarange() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -19,7 +18,7 @@ export default function NavbarSarange() {
   const handleLogout = () => {
     dispatch(logoutUser())
     .then(() => {
-      navigate("/sell/login");
+      navigate("/login");
     })
     .catch((error) => {
       console.error('error', error);

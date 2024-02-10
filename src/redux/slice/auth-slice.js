@@ -18,7 +18,7 @@ const authSlice = createSlice({
             state.error = null;
         },
         logout(state) {
-            localStorage.removeItem("token")
+            Cookies.remove("token")
             state.isAuthenticated = false;
         },
     },
