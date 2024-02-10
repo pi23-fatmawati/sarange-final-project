@@ -7,17 +7,12 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import axios from "axios";
 import { getUserSuccess } from "../redux/slice/user-slice";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserBasicInfo } from "../redux/slice/user-slice";
 
 export default function HomePage() {
   const slides = [Image1, Image1, Image1];
-  const dispatch = useDispatch();
   const [curr, setCurr] = useState(0);
-  const [userData, setUserData] = useState({
-    nama: "",
-    coin: 0,
-  });
-  const [loading, setLoading] = useState(true);
   const prev = () =>
     setCurr((curr) => (curr === 0 ? slides.length - 1 : curr - 1));
   const next = () =>
@@ -31,40 +26,17 @@ export default function HomePage() {
     return () => clearInterval(slideInterval);
   }, []);
 
-  const fetchUserProfile = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
-        {
-          headers: {
-            authorization: `${token}`,
-          },
-        }
-      );
-
-      const userProfileData = response.data.user;
-      dispatch(getUserSuccess({ data: userProfileData }));
-      setUserData({
-        nama: userProfileData.user_name,
-        coin: userProfileData.coin_user,
-      });
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-      if (error.response) {
-        console.error("Response status:", error.response.status);
-        console.error("Response data:", error.response.data);
-      }
-    }
-  };
+  const { data: userData, isLoading } = useSelector(
+    (state) => state.user_basic_info
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    dispatch(getUserBasicInfo());
+  }, [dispatch]);
 
-  if (loading) {
-    return <div className="container-page text-center">Loading...</div>
+  if (isLoading) {
+    return <div className="container-page text-center">Loading...</div>;
   }
   return (
     <>

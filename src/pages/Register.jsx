@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
 import "../components/component.css";
@@ -9,8 +8,6 @@ import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import ButtonGreen from "../components/Button-green";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
-import SuccessModal from "../components/SuccessModal";
-import ConfirmModal from "../components/ConfirmModal";
 import {
   setName,
   setEmail,
@@ -19,7 +16,10 @@ import {
   setAgreement,
   setError,
   resetForm,
+  registerUser,
 } from "../redux/slice/register-slice";
+import SuccessModal from "../components/SuccessModal";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Register = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -32,52 +32,15 @@ const Register = () => {
 
   const handleRegister = async (event) => {
     event.preventDefault();
+    console.log("Handle Register function dipanggil");
 
-    try {
-      if (!user_name || !email || !password || !confirm_password) {
-        dispatch(setError("Semua kolom harus diisi"));
-        return;
-      }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        dispatch(setError("Format email tidak valid"));
-        return;
-      }
-      if (password !== confirm_password) {
-        dispatch(setError("Password dan konfirmasi password tidak cocok"));
-        return;
-      }
-      if (!agreement) {
-        dispatch(setError("Harap setujui syarat dan ketentuan yang berlaku"));
-        return;
-      }
-
-      setLoading(true);
-
-      const response = await axios.post(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/register",
-        {
-          user_name,
-          email,
-          password,
-        }
-      );
-
-      const data = response.data;
-      if (response.status === 201) {
-        localStorage.setItem("token", data.token);
-        setSuccessModal(true);
-        dispatch(resetForm());
-      }
-    } catch (error) {
-      if (error.message.includes("Request failed with status code 400")) {
-        dispatch(setError("Email sudah terdaftar")), setOpenModal(true);
-      } else {
-        dispatch(setError(error.message || "Gagal mendaftar"));
-      }
-    } finally {
-      setLoading(false);
-    }
+    dispatch(registerUser({ user_name, email, password }))
+      .then(() => {
+        navigate("/sell/profile");
+      })
+      .catch((error) => {
+        console.error("error registering", error);
+      });
   };
   useEffect(() => {
     if (successModal) {

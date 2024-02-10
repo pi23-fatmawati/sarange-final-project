@@ -1,81 +1,78 @@
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateCart,
+  deleteCart,
+  incrementCartItem,
+  decrementCartItem,
+} from "../redux/slice/cart-slice";
+import { getProduct } from "../redux/slice/product-slice";
 
 const CheckoutTable = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Plastic Bottle",
-      quantity: 20,
-      weight: 0,
-      isChecked: false,
-    },
-    { id: 2, name: "Plastic bag", quantity: 10, weight: 0, isChecked: false },
-    { id: 3, name: "Ecobrick", quantity: 4, weight: 8, isChecked: false },
-  ]);
-  const [checkAll, setCheckAll] = useState(false);
+  const { cartItems } = useSelector((state) => state.cart);
+  const products = useSelector((state) => state.product.product);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [selectAllChecked, setSelectAllChecked] = useState(false);
 
-  const handleIncrement = (productId) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, weight: product.weight + 1 }
-          : product
-      )
-    );
+  const handleIncrement = (id_cart) => {
+    dispatch(incrementCartItem(id_cart));
   };
 
-  const handleDecrement = (productId) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId && product.weight > 0
-          ? { ...product, weight: product.weight - 1 }
-          : product
-      )
-    );
+  const handleDecrement = (id_cart) => {
+    dispatch(decrementCartItem(id_cart));
   };
 
-  const handleDelete = (productId) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== productId)
-    );
+  const handleDelete = async (id_cart) => {
+    try {
+      setLoading((prevLoading) => ({
+        ...prevLoading,
+        [id_cart]: true,
+      }));
+      dispatch(deleteCart(id_cart));
+      await dispatch(updateCart());
+    } catch (error) {
+      console.error("Error deleting cart item:", error);
+    } finally {
+      setLoading((prevLoading) => ({
+        ...prevLoading,
+        [id_cart]: false,
+      }));
+    }
   };
 
-  const handleWeightChange = (productId, newWeight) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId ? { ...product, weight: newWeight } : product
-      )
-    );
+  const handleWeightChange = (id_cart, newWeight) => {
+    // const updatedCartItems = cartItems.map((cartItem) =>
+    //   cartItem.id_cart === id_cart
+    //     ? { ...cartItem, total_product: newWeight }
+    //     : cartItem
+    // );
+    // dispatch(updateCart(updatedCartItems));
   };
+
   const handleCheckAll = () => {
-    setCheckAll((prevCheckAll) => {
-      const updatedCheckAll = !prevCheckAll;
-      setProducts((prevProducts) =>
-        prevProducts.map((product) => ({
-          ...product,
-          isChecked: updatedCheckAll,
-        }))
-      );
-      return updatedCheckAll;
-    });
+    setSelectAllChecked((prev) => !prev);
   };
+
+  useEffect(() => {
+    dispatch(updateCart());
+    dispatch(getProduct());
+  }, [dispatch]);
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-24">
       <table className="w-full text-sm rtl:text-right text-center">
         <thead className="font-medium uppercase bg-green-2 text-white">
           <tr>
             <th className="px-6 py-5">
-              <label>
-                <input
-                  type="checkbox"
-                  className="form-checkbox"
-                  checked={checkAll}
-                  onChange={handleCheckAll}
-                />
-              </label>
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                checked={selectAllChecked}
+                onChange={handleCheckAll}
+              />
             </th>
             <th>Produk</th>
             <th>Jumlah Koin</th>
@@ -84,51 +81,79 @@ const CheckoutTable = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="odd:bg-white even:bg-gray-50">
-              <td className="px-6 py-4">
-                <input type="checkbox" className="form-checkbox" />
-              </td>
-              <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-left">
-                {product.name}
-              </td>
-              <td className="px-6 py-4">{product.quantity}</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => handleDecrement(product.id)}
-                    className="decrement"
-                  >
-                    -
-                  </button>
+          {cartItems.map((cartItem) => {
+            const product = products.find(
+              (p) => p.id_product === cartItem.id_product
+            );
+            return (
+              <tr key={cartItem.id} className="odd:bg-white even:bg-gray-50">
+                <td className="px-6 py-4">
                   <input
-                    type="number"
-                    className="count-checkout border-none bg-transparent max-w-12 text-center text-sm"
-                    value={product.weight}
-                    onChange={(e) =>
-                      handleWeightChange(
-                        product.id,
-                        parseInt(e.target.value, 10)
-                      )
-                    }
+                    type="checkbox"
+                    className="form-checkbox"
+                    checked={selectAllChecked}
                   />
-                  <button
-                    onClick={() => handleIncrement(product.id)}
-                    className="increment"
-                  >
-                    +
-                  </button>
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => handleDelete(product.id)}
-                  className="font-medium text-red-600 dark:text-red-500 hover:underline ml-2 cursor-pointer text-lg"
-                />
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap">
+                  {product && (
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <img
+                          src={product.product_pic}
+                          alt={product.product_name}
+                          className="w-16 h-16 object-cover"
+                        />
+                      </div>
+                      <div>{product.product_name}</div>
+                    </div>
+                  )}
+                </td>
+                <td className="px-6 py-4">
+                  {cartItem.total_coin * cartItem.total_product}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => handleDecrement(cartItem.id_cart)}
+                      className="decrement"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      className="count-checkout border-none bg-transparent max-w-12 text-center text-sm"
+                      value={cartItem.total_product}
+                      onChange={(e) =>
+                        handleWeightChange(
+                          cartItem.id_cart,
+                          parseInt(e.target.value, 10)
+                        )
+                      }
+                    />
+                    <button
+                      onClick={() => handleIncrement(cartItem.id_cart)}
+                      className="increment"
+                    >
+                      +
+                    </button>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  {loading[cartItem.id_cart] ? (
+                    <div className="text-lg text-gray-500">
+                      <FontAwesomeIcon icon={faSpinner} spin />
+                    </div>
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={() => handleDelete(cartItem.id_cart)}
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline ml-2 cursor-pointer text-lg"
+                    />
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 // import userImage from "../pic/profilepic0.png";
 import axios from "axios";
+import Cookies from "js-cookie";
+import InputProfile from "../components/InputProfile"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonGreen from "../components/Button-green";
 import ButtonOutline from "../components/Button-outline";
-import InputProfile from "../components/InputProfile";
-import "../App.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import SuccessModal from "../components/SuccessModal";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const UserProfile = () => {
   const [successModal, setSuccessModal] = useState(false);
@@ -28,7 +28,7 @@ const UserProfile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await axios.get(
         "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
         {
@@ -76,7 +76,7 @@ const UserProfile = () => {
   const handleSaveProfile = async (event) => {
     try {
       event.preventDefault();
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
 
       const commonHeaders = {
         authorization: `${token}`,

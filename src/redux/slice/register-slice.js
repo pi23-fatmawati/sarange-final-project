@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const registerSlice = createSlice({
     name: 'register',
@@ -41,4 +43,23 @@ const registerSlice = createSlice({
 });
 
 export const { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm } = registerSlice.actions;
+
+export const registerUser = (userData) => async (dispatch) => {
+    try {
+        const response = await axios.post("https://final-sarange-eff62c954ab5.herokuapp.com/register", userData);
+        const data = response.data;
+
+        if(response.status !== 201) {
+            throw new Error(data.error || 'gagal mendaftar');
+        }
+
+        Cookies.set("token", data.token, { expires: 7 })
+
+        dispatch(resetForm())
+    } catch {
+        console.error("Error registering", error)
+        dispatch(setError(error.message || "Gagal mendaftar"));
+    }
+}
+
 export default registerSlice.reducer

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const userSlice = createSlice({
   name: "user",
@@ -20,8 +21,14 @@ export const { getUserSuccess } = userSlice.actions;
 export const getUser = () => {
   return async (dispatch) => {
     try {
+      const token = Cookies.get("token");
       const response = await axios.get(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/profile"
+        "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
       );
       dispatch(getUserSuccess({ data: response.data.user }));
     } catch (error) {
@@ -49,17 +56,18 @@ export const { getUserBasicInfoSuccess } = userBasicInfoSlice.actions;
 export const getUserBasicInfo = () => {
   return async (dispatch) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
-        {
-          headers: {
-            authorization: `${token}`,
-          },
-        }
-      );
-
-      dispatch(getUserBasicInfoSuccess({ data: response.data }));
+      const token = Cookies.get("token");
+      if (token) {
+        const response = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+          {
+            headers: {
+              authorization: `${token}`,
+            },
+          }
+        );
+        dispatch(getUserBasicInfoSuccess({ data: response.data }));
+      }
     } catch (error) {
       console.error("Gagal mendapatkan data user:", error);
     }

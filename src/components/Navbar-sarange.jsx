@@ -1,32 +1,51 @@
-import { useState, useRef, useEffect } from "react";
-import Logo from "../assets/full-logo-sarange.svg";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Profile from "../assets/profile.png";
+import Logo from "../assets/full-logo-sarange.svg";
 import ButtonOutline from "./Button-outline";
 import ButtonGreen from "./Button-green";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../redux/slice/auth-slice";
 
 export default function NavbarSarange() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [clickedLink, setClickedLink] = useState("Beranda");
+  const [profilePic, setProfilePic] = useState("");
+  const [userData, setUserData] = useState(null)
+  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const profileButtonRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        profileButtonRef.current &&
-        !profileButtonRef.current.contains(event.target)
-      ) {
-        setIsProfileOpen(false);
+    async function fetchProfileData() {
+      try {
+        const token = Cookies.get("token");
+        const response = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
+          {
+            headers: {
+              authorization: `${token}`,
+            },
+          }
+        );
+        const userProfileData = response.data.user;
+        setProfilePic(userProfileData.profile_pic);
+        setUserData(userProfileData);
+      } catch (error) {
+        console.error("Error fetching profile pic:", error);
       }
-    };
+    }
 
-    document.addEventListener("click", handleClickOutside);
+    fetchProfileData();
+  }, []);
 
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+      setIsLogin(false)
+    }
   }, []);
 
   const toggleNavbar = () => {
@@ -41,6 +60,16 @@ export default function NavbarSarange() {
     setClickedLink(link);
   };
 
+  const handleLogout = () => {
+    dispatch(logoutUser())
+    .then(() => {
+      navigate("/login")
+    })
+    .catch((error) => {
+      console.error('error', error);
+    })
+  }
+
   return (
     <nav
       style={{ backgroundColor: "white" }}
@@ -54,7 +83,8 @@ export default function NavbarSarange() {
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0">
-          <button
+          {isLogin ? (
+            <button
             type="button"
             className="btn-profile flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"
             id="user-menu-button"
@@ -68,10 +98,14 @@ export default function NavbarSarange() {
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={Profile}
+              src={profilePic}
               alt="user photo"
             />
           </button>
+          ) : (
+            <ButtonGreen text="Login Sekarang" onClick={() => navigate("/login")}></ButtonGreen>
+          )}
+          
           {/* Dropdown */}
           <div
             className={`z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 top-10 right-2 absolute ${
@@ -81,17 +115,17 @@ export default function NavbarSarange() {
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 font-bold text-center">
-                User
+                {userData && userData.user_name}
               </span>
               <span className="block text-sm  text-gray-500 truncate text-center">
-                user@gmail.com
+                {userData && userData.email}
               </span>
             </div>
             <div className="button-popup-profile mx-4 flex flex-col gap-2 p-4">
               <Link to="/sell/profile">
                 <ButtonGreen text="Lihat Profile"></ButtonGreen>
               </Link>
-              <ButtonOutline text="Logout"></ButtonOutline>
+              <ButtonOutline text="Logout" onClick={handleLogout}></ButtonOutline>
             </div>
           </div>
           <button
