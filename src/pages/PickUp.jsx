@@ -7,17 +7,42 @@ import ButtonGreen from "../components/Button-green";
 import ConfirmModal from "../components/ConfirmModal";
 import { useState, useEffect } from "react";
 import SuccessModal from "../components/SuccessModal";
-import WarningModal from "../components/WarningModal"; // Perbaikan import di sini
+import WarningModal from "../components/WarningModal";
 import axios from "axios";
 
 export default function PickUp() {
+  const [cartItems, setCartItems] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [warningModal, setWarningModal] = useState(false); // Perbaikan nama variabel di sini
+  const [warningModal, setWarningModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [pickupDate, setPickupDate] = useState("");
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
+          {
+            headers: {
+              authorization: `${token}`,
+            },
+          }
+        );
+        console.log("Response data:", response.data);
+        setCartItems(response.data);
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        setCartItems([]); // Set cartItems to an empty array in case of error
+      }
+    };
+
+    fetchCartItems();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,20 +68,53 @@ export default function PickUp() {
     fetchData();
   }, []);
 
-  // Function to check if all required fields are filled
   const isDataComplete = () => {
     const phoneNumberComplete = phoneNumber !== "";
     const userAddressComplete = userAddress !== "";
     const pickupDateComplete = pickupDate !== "";
 
-    console.log("Phone number completeness:", phoneNumberComplete);
-    console.log("User address completeness:", userAddressComplete);
-    console.log("Pickup date completeness:", pickupDateComplete);
+    return phoneNumberComplete && userAddressComplete && pickupDateComplete;
+  };
 
-    const complete =
-      phoneNumberComplete && userAddressComplete && pickupDateComplete;
-    console.log("Data completeness:", complete);
-    return complete;
+  const sendTransactionRequest = async () => {
+    try {
+      if (!Array.isArray(cartItems)) {
+        console.error("Cart items is not an array");
+        return;
+      }
+
+      if (cartItems.length === 0) {
+        console.error("No cart items available");
+        setErrorMessage(
+          "Tidak ada item dalam keranjang belanja. Tambahkan item ke keranjang belanja sebelum melanjutkan."
+        );
+        return;
+      }
+
+      const requestData = {
+        cartItems: cartItems.map((cartItem) => ({
+          id_cart: cartItem.id_cart,
+          pickup_date: pickupDate,
+        })),
+      };
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/transaction",
+        requestData,
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      setOpenModal(true);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      setErrorMessage(
+        "Terjadi kesalahan saat membuat transaksi. Silakan coba lagi."
+      );
+    }
   };
 
   return (
@@ -112,18 +170,21 @@ export default function PickUp() {
         </div>
       </div>
       <div className="mt-6 float-right">
-        {/* ButtonGreen */}
-        <ButtonGreen
-          disabled={!isDataComplete()} // Disable the button if required data fields are not filled
+        <button
+          disabled={!isDataComplete()}
           onClick={() => {
             if (!isDataComplete()) {
               setWarningModal(true);
             } else {
-              setOpenModal(true);
+              sendTransactionRequest();
             }
           }}
-          text="Atur Jadwal"
-        />
+        >
+          Atur Jadwal
+        </button>
+        {cartItems.length === 0 && (
+          <div className="text-red-500 mt-2">{errorMessage}</div>
+        )}
       </div>
       <WarningModal
         show={warningModal}
