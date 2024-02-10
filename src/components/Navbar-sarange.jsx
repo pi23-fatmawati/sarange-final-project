@@ -15,6 +15,7 @@ export default function NavbarSarange() {
   const [profilePic, setProfilePic] = useState("");
   const [userData, setUserData] = useState(null)
   const [isLogin, setIsLogin] = useState(true);
+  const [isRegister, setIsRegister] = useState(true)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const profileButtonRef = useRef(null);
@@ -44,7 +45,7 @@ export default function NavbarSarange() {
 
   useEffect(() => {
     if (!Cookies.get("token")) {
-      setIsLogin(false)
+      setIsLogin(false) && setIsRegister(false)
     }
   }, []);
 
@@ -83,7 +84,7 @@ export default function NavbarSarange() {
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0">
-          {isLogin ? (
+          {isLogin || isRegister ? (
             <button
             type="button"
             className="btn-profile flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"

@@ -56,7 +56,7 @@ export const registerUser = (userData) => async (dispatch) => {
         Cookies.set("token", data.token, { expires: 7 })
 
         dispatch(resetForm())
-    } catch {
+    } catch(error) {
         console.error("Error registering", error)
         dispatch(setError(error.message || "Gagal mendaftar"));
     }
