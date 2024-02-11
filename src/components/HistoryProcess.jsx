@@ -7,11 +7,10 @@ import ButtonOutline from "./Button-outline";
 import { Link } from "react-router-dom";
 
 const History = () => {
-  const itemsPerPage = 4; // Banyak data yang tampil tiap halaman
+  const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionData, setTransactionData] = useState([]);
 
-  // Mengambil data transaksi dari endpoint
   useEffect(() => {
     const fetchProcessData = async () => {
       try {
@@ -27,7 +26,6 @@ const History = () => {
         const data = await response.json();
         console.log(data);
 
-        // Memeriksa apakah ada data transaksi yang diterima dari API
         if (Array.isArray(data.transactions) && data.transactions.length > 0) {
           setTransactionData((prevData) => [...prevData, ...data.transactions]);
         } else {
@@ -51,8 +49,6 @@ const History = () => {
         );
         const data = await response.json();
         console.log(data);
-
-        // Memeriksa apakah ada data transaksi yang diterima dari API
         if (Array.isArray(data.transactions) && data.transactions.length > 0) {
           setTransactionData((prevData) => [...prevData, ...data.transactions]);
         } else {
@@ -67,17 +63,14 @@ const History = () => {
     fetchConfirmData();
   }, []);
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(transactionData.length / itemsPerPage);
 
-  // Sort transactions by status: Konfirmasi -> Diproses
   const sortedTransactions = transactionData.sort((a, b) => {
     if (a.status === "Konfirmasi" && b.status === "Diproses") return -1;
     if (a.status === "Diproses" && b.status === "Konfirmasi") return 1;
     return 0;
   });
 
-  // Calculate the starting and ending index of the transactions for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(
     startIndex + itemsPerPage,
@@ -104,7 +97,7 @@ const History = () => {
         }
       );
       const data = await response.json();
-      console.log(data); // Handle response data accordingly
+      console.log(data);
     } catch (error) {
       console.error("Error confirming transaction:", error);
     }

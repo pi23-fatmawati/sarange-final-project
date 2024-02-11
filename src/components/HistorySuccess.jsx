@@ -5,7 +5,7 @@ import ButtonGreen from "./Button-green";
 import ButtonOutline from "./Button-outline";
 
 const HistorySuccess = () => {
-  const itemsPerPage = 10; //banyak data yang tampil tiap page
+  const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionData, setTransactionData] = useState([]);
   const token = localStorage.getItem("token");
@@ -24,7 +24,6 @@ const HistorySuccess = () => {
         const data = await response.json();
         console.log(data);
 
-        // Check if the received data is an object with transactions array
         if (data && Array.isArray(data.transactions)) {
           setTransactionData(data.transactions);
         } else {
@@ -38,14 +37,10 @@ const HistorySuccess = () => {
     fetchData();
   }, [token]);
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(transactionData.length / itemsPerPage);
-
-  // Calculate the starting and ending index of the transactions for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, transactionData.length);
 
-  // Ensure transactionData is an array before calling slice
   const currentTransactions = Array.isArray(transactionData)
     ? transactionData.slice(startIndex, endIndex)
     : [];
@@ -73,7 +68,9 @@ const HistorySuccess = () => {
                 key={index}
                 className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
               >
-                <td className="px-6 py-4">{transaction.pickup_date}</td>
+                <td className="px-6 py-4">
+                  {new Date(transaction.pickup_date).toLocaleDateString()}
+                </td>
                 <td className="px-6 py-4">
                   {transaction.Cart.Product.product_name}
                 </td>
