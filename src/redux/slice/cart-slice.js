@@ -136,25 +136,29 @@ export const deleteCart = (id_cart) => {
 };
 
 const calculateTotalProducts = (carts) => {
-  return carts.reduce((total, cartItem) => total + cartItem.quantity, 0);
+  return carts.reduce((total, cartItem) => total + cartItem.total_product, 0);
 };
 
 export const updateCartData = () => {
   return async (dispatch, getState) => {
     try {
       const token = Cookies.get("token");
-      const { cartItems, selectedItems } = getState().cart;
-      console.log("cart items:", cartItems)
+      const { cart } = getState();
+      if (!cart) {
+        console.error("Cart state is undefined or null");
+        return [];
+      } 
+      const { cartItems, selectedItems } = cart;
+      console.log("cart items:", cartItems);
       const payload = cartItems.map((cartItem) => ({
         id_cart: cartItem.id_cart,
         total_product: cartItem.total_product,
         is_check: selectedItems[cartItem.id_cart] || false,
       }));
-      console.log("payload:", payload)
 
       const response = await axios.patch(
         "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
-        payload,
+        { cartItems: payload },
         {
           headers: {
             authorization: `${token}`,
@@ -162,12 +166,9 @@ export const updateCartData = () => {
         }
       );
 
-      console.log("Response from server:", response.data);
-
       const { updatedCartItems } = response.data;
 
       dispatch(updateCartSuccess(updatedCartItems));
-      console.log("update:", updatedCartItems, "old:", cartItems);
       return updatedCartItems;
     } catch (error) {
       console.error("Error updating cart data, ", error);

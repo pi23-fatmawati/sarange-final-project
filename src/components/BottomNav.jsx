@@ -13,8 +13,11 @@ const BottomNav = () => {
   const { totalProducts, totalCoins } = cartItems.reduce(
     (totals, cartItem) => {
       if (selectedItems[cartItem.id_cart]) {
-        totals.totalProducts += cartItem.total_product;
-        totals.totalCoins += cartItem.total_coin * cartItem.total_product;
+        const productWeight = cartItem.total_product || 0;
+        const productCoins = cartItem.total_coin * productWeight || 0;
+
+        totals.totalProducts += productWeight;
+        totals.totalCoins += productCoins;
       }
       return totals;
     },
@@ -23,7 +26,7 @@ const BottomNav = () => {
 
   const handlePickUpButton = async () => {
     await dispatch(updateCartData());
-    // navigate("/sell/pick-up");   
+    navigate("/sell/pick-up");
   };
 
   const isDisabled = Object.values(selectedItems).every((value) => !value);
@@ -40,10 +43,12 @@ const BottomNav = () => {
         {isDisabled ? (
           <div className="flex flex-col gap-[2px]">
             <ButtonGreen text="Atur Penjualan" disabled={isDisabled} />
-            <div className="text-xs text-red-600 text-center">Produk harus diceklis</div>
+            <div className="text-xs text-red-600 text-center">
+              Produk harus diceklis
+            </div>
           </div>
         ) : (
-          <Link> 
+          <Link to="/sell/pick-up">
             <ButtonGreen
               text="Atur Penjualan"
               onClick={handlePickUpButton}
