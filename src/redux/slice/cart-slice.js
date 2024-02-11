@@ -7,6 +7,7 @@ const cartSlice = createSlice({
   initialState: {
     cartItems: [],
     totalCartItems: 0,
+    selectedItems: {},
   },
   reducers: {
     addCartSuccess(state, action) {
@@ -42,7 +43,6 @@ const cartSlice = createSlice({
         cartItem.total_product += 1;
       }
     },
-
     decrementCartItem(state, action) {
       const id_cart = action.payload;
       const cartItem = state.cartItems.find((item) => item.id_cart === id_cart);
@@ -50,6 +50,12 @@ const cartSlice = createSlice({
       if (cartItem && cartItem.total_product > 1) {
         cartItem.total_product -= 1;
       }
+    },
+    updateSelectedItems(state, action) {
+      state.selectedItems = {
+        ...state.selectedItems,
+        ...action.payload,
+      };
     },
   },
 });
@@ -61,6 +67,7 @@ export const {
   deleteCartSuccess,
   incrementCartItem,
   decrementCartItem,
+  updateSelectedItems,
 } = cartSlice.actions;
 
 export const addCart = (id_product) => {
@@ -140,30 +147,31 @@ export const updateCartData = () => {
 
       const updatedCartItems = await Promise.all(
         cartItems.map(async (cartItem) => {
-          const { id_cart, total_product, is_check } = cartItem;
-          if (selectedItems[id_cart]) {
-            const response = await axios.patch(
-              "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
-              { id_cart, total_product, is_check },
-              {
-                headers: {
-                  authorization: `${token}`,
-                },
-              }
-            );
-            const { updatedCartItem } = response.data;
+          const { id_cart, total_product } = cartItem;
+          const is_check = selectedItems[id_cart] || false;
 
-            dispatch(updateCart(updatedCartItem));
-          } else {
-            dispatch(updateCart(cartItem));
-          }
+          const response = await axios.patch(
+            "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
+            { id_cart, total_product, is_check },
+            {
+              headers: {
+                authorization: `${token}`,
+              },
+            }
+          );
+          const { updatedCartItem } = response.data;
 
-          return cartItem;
+          dispatch(updateCart(updatedCartItem));
+          return updatedCartItem;
         })
       );
+
       dispatch(updateCartSuccess(updatedCartItems));
+      console.log("update:", updatedCartItems, "old:", cartItems);
+      return updatedCartItems;
     } catch (error) {
       console.error("Error updating cart data, ", error);
+      return [];
     }
   };
 };

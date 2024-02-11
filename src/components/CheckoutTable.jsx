@@ -7,13 +7,14 @@ import {
   deleteCart,
   incrementCartItem,
   decrementCartItem,
+  updateSelectedItems,
 } from "../redux/slice/cart-slice";
 import { getProduct } from "../redux/slice/product-slice";
 
 const CheckoutTable = () => {
+  const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
   const products = useSelector((state) => state.product.product);
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState({});
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [selectedItems, setSelectedItems] = useState({});
@@ -45,44 +46,43 @@ const CheckoutTable = () => {
   };
 
   const handleWeightChange = (id_cart, newWeight) => {
-    // const updatedCartItems = cartItems.map((cartItem) =>
-    //   cartItem.id_cart === id_cart
-    //     ? { ...cartItem, total_product: newWeight }
-    //     : cartItem
-    // );
-    // dispatch(updateCart(updatedCartItems));
+    const updatedCartItems = cartItems.map((cartItem) =>
+      cartItem.id_cart === id_cart
+        ? { ...cartItem, total_product: newWeight }
+        : cartItem
+    );
+    dispatch(updateCart(updatedCartItems));
   };
 
   const handleCheckAll = () => {
     setSelectAllChecked((prev) => !prev);
-    setSelectedItems((prevSelectedItems) => {
-      const updatedSelectedItems = {};
-      const allItemIds = cartItems.map((item) => item.id_cart);
+    const updatedSelectedItems = {};
+    const allItemIds = cartItems.map((item) => item.id_cart);
 
-      if (!selectAllChecked) {
-        allItemIds.forEach((id) => {
-          updatedSelectedItems[id] = true;
-        });
-      }
-
-      return updatedSelectedItems;
+    allItemIds.forEach((id) => {
+      updatedSelectedItems[id] = !selectAllChecked;
     });
+
+    setSelectedItems(updatedSelectedItems);
+    dispatch(updateSelectedItems(updatedSelectedItems));
   };
 
   const handleItemCheck = (id_cart) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [id_cart]: !prevState[id_cart],
+    setSelectedItems((prevSelectedItems) => ({
+      ...prevSelectedItems,
+      [id_cart]: !prevSelectedItems[id_cart],
     }));
+    dispatch(updateSelectedItems({ [id_cart]: !selectedItems[id_cart] }));
+  };
+
+  const isCartItemChecked = (id_cart) => {
+    return selectedItems[id_cart] === true;
   };
 
   useEffect(() => {
     dispatch(updateCart());
     dispatch(getProduct());
   }, [dispatch]);
-  const isCartItemChecked = (id_cart) => {
-    return selectedItems[id_cart] || false;
-  };
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-24">
@@ -104,83 +104,92 @@ const CheckoutTable = () => {
           </tr>
         </thead>
         <tbody>
-          {cartItems.map((cartItem) => {
-            const product = products.find(
-              (p) => p.id_product === cartItem.id_product
-            );
-            return (
-              <tr key={cartItem.id} className="odd:bg-white even:bg-gray-50">
-                <td className="px-6 py-4">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox"
-                    checked={isCartItemChecked(cartItem.id_cart)}
-                    onChange={() => handleItemCheck(cartItem.id_cart)}
-                  />
-                </td>
-                <td className="px-6 py-3 whitespace-nowrap">
-                  {product && (
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <img
-                          src={product.product_pic}
-                          alt={product.product_name}
-                          className="w-16 h-16 object-cover"
-                        />
-                      </div>
-                      <div>{product.product_name}</div>
-                    </div>
-                  )}
-                </td>
-                <td className="px-6 py-4">
-                  {cartItem.total_coin * cartItem.total_product}
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      onClick={() => handleDecrement(cartItem.id_cart)}
-                      className="decrement"
-                    >
-                      -
-                    </button>
+          {products.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="px-6 py-4">
+                Loading...
+              </td>
+            </tr>
+          ) : (
+            cartItems.map((cartItem) => {
+              const product = products.find(
+                (p) => p.id_product === cartItem.id_product
+              );
+              return (
+                <tr key={cartItem.id} className="odd:bg-white even:bg-gray-50">
+                  <td className="px-6 py-4">
                     <input
-                      type="number"
-                      className="count-checkout border-none bg-transparent max-w-12 text-center text-sm"
-                      value={cartItem.total_product}
-                      onChange={(e) =>
-                        handleWeightChange(
-                          cartItem.id_cart,
-                          parseInt(e.target.value, 10)
-                        )
-                      }
+                      type="checkbox"
+                      className="form-checkbox"
+                      checked={isCartItemChecked(cartItem.id_cart)}
+                      onChange={() => handleItemCheck(cartItem.id_cart)}
                     />
-                    <button
-                      onClick={() => handleIncrement(cartItem.id_cart)}
-                      className="increment"
-                    >
-                      +
-                    </button>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  {loading[cartItem.id_cart] ? (
-                    <div className="text-lg text-gray-500">
-                      <FontAwesomeIcon icon={faSpinner} spin />
+                  </td>
+                  <td className="px-6 py-3 whitespace-nowrap">
+                    {product && (
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <img
+                            src={product.product_pic}
+                            alt={product.product_name}
+                            className="w-16 h-16 object-cover"
+                          />
+                        </div>
+                        <div>{product.product_name}</div>
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    {cartItem.total_coin * cartItem.total_product}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => handleDecrement(cartItem.id_cart)}
+                        className="decrement"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        className="count-checkout border-none bg-transparent max-w-12 text-center text-sm"
+                        value={cartItem.total_product}
+                        onChange={(e) =>
+                          handleWeightChange(
+                            cartItem.id_cart,
+                            parseInt(e.target.value, 10)
+                          )
+                        }
+                      />
+                      <button
+                        onClick={() => handleIncrement(cartItem.id_cart)}
+                        className="increment"
+                      >
+                        +
+                      </button>
                     </div>
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      onClick={() => handleDelete(cartItem.id_cart)}
-                      className="font-medium text-red-600 dark:text-red-500 hover:underline ml-2 cursor-pointer text-lg"
-                    />
-                  )}
-                </td>
-              </tr>
-            );
-          })}
+                  </td>
+                  <td className="px-6 py-4">
+                    {loading[cartItem.id_cart] ? (
+                      <div className="text-lg text-gray-500">
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                      </div>
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        onClick={() => handleDelete(cartItem.id_cart)}
+                        className="font-medium text-red-600 dark:text-red-500 hover:underline ml-2 cursor-pointer text-lg"
+                      />
+                    )}
+                  </td>
+                </tr>
+              );
+            })
+          )}
         </tbody>
       </table>
     </div>
   );
 };
+
 export default CheckoutTable;
