@@ -1,0 +1,122 @@
+.btn-green{
+    background-color: #52C41A;
+}
+.btn-green:hover{
+    background-color: #254416;
+}
+.btn-green.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.card-why-sarange{
+    background-color: #F6FFED;
+    box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.btn-outline{
+    border: 1px solid #52C41A;
+    color: #52C41A;
+}
+.btn-outline:hover {
+    background: #eafddc;
+}
+.nav-link{
+    color: grey;
+}
+.nav-link.active, .nav-link:hover {
+    color: #52C41A;
+}
+.product-card img {
+    height: 192px;
+    object-fit: cover;
+}
+.increment, .decrement {
+  border: none;
+  text-decoration: none;
+  border-radius: 8px;
+  background-color: #a1e268;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+}
+.decrement {
+  background-color: #c7c7c7;
+}
+input.count-checkout::-webkit-inner-spin-button,
+input.count-checkout::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input.count-checkout[type=number] {
+    -moz-appearance: textfield;
+}
+.status-button {
+  background-color: #ffd666;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.confirmed-status {
+  background-color: #52c41a;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.detail-button {
+  background-color: #52c41a;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.tab-item.active {
+  color: #52C41A;
+}
+.card-coin{
+    background-color: #F2F8EA;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+}
+.card-redeem{
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+.line-redeem{
+    border-bottom: solid 2px #C4C4C4;
+    width: 130px;
+}
+.card-redeem-content{
+    color: #52C41A;
+}
+.card-ewallet{
+    border-radius: 20px;
+    box-shadow: 0 2px 4px 2px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+}
+.article-card img {
+    min-width: 30%;
+}
+.socmed-icon {
+    padding: 8px;
+    background-color: #52C41A;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.socmed-icon:hover {
+    background-color: #254416;
+}
+@media (max-width: 766px){
+    .card-redeem{
+        width: 5rem;
+    }
+    .line-redeem{
+        width: 5rem;
+    }
+    .card-redeem-content h1{
+        font-size: 1rem; /* 24px */
+    }
+}

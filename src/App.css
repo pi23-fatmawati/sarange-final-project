@@ -1,42 +1,157 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.introduction-desc h1, .about-text h1, .why-desc h1, .gabung-desc h1{
+  color: #58B958;
 }
+.terpercaya{
+  background-color: #F6FFED;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.gabung{
+  background-color: #D9F7BE;
+}
+.container-page {
+  margin-top: 64px;
+  padding: 40px 80px;
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.img-home img{
+  border-radius: 32px;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.text-home{
+  color: #1B501C;
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn-home{
+  background-color: #5B7D2E;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.btn-home:hover{
+  background-color: #1B501C;
 }
-
+.coin{
+  background-color: #F2F8EA;
+  border-radius: 20px;
+  box-shadow: 0 2px 2px 2px rgb(0 0 0 / 0.1);
+}
+.line{
+  border-left: solid 2px #C4C4C4;
+}
+.slide-image{
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.carousel-img{
+  width: 100vw;
+}
+.redeem-content{
+  background-color: #F2F8EA;
+  border-radius: 20px;
+  border: solid 2px #E2E2E2;
+}
+.selected-card, .selected-ewallet{
+  background-color: #E2E2E2;
+  border: solid 2px #58B958;
+}
+.btn-klaim:disabled{
+  background-color: #d4ffbe;
+}
+.btn-klaim:disabled:hover{
+  background-color: #d4ffbe;
+}
+.btn-klaim{
+    background-color: #52C41A;
+}
+.btn-klaim:hover{
+    background-color: #254416;
+}
+.redeem-ewallet, .redeem-card{
+  gap: 2.5rem;
+}
+.popup{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.popup-content{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+}
+.dropdown-filter{
+  background-color: #F7F6FE;
+}
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
+}
+.profile-item {
+  display: flex;
+}
+.profile-item label {
+  display: flex;
+  align-items: center;
+  width: 25%;
+}
+.pic {
+  width: 50%;
+
+}
+@media (max-width: 991.98px) {
+  .introduction{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .introduction-desc h1, .introduction-desc p{
+    text-align: center;
+    margin-left: 1.25rem; /* 20px */
+    margin-right: 1.25rem; /* 20px */
+  }
+  .about-us, .gabung{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .about-image{
+    width: 50% !important;
+  }
+  .about-image img{
+    height: auto;
+  }
+  .about-text{
+    text-align: center;
+  }
+  .about-text h1, .about-text p, .gabung-desc h1, .gabung-desc p{
+    margin-left: 1.25rem; /* 20px */
+    margin-right: 1.25rem; /* 20px */
+  }
+ 
+}
+@media (max-width: 766px) {
+  .about-us{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .introduction-desc h1, .about-text h1, .why-desc h1, .gabung-desc h1{
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  .introduction-desc p{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  .about-text p{
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+  .img-gabung, .about-image, .introduction-image{
+    margin-top: 2rem; /* 32px */
+    margin-bottom: 2rem; /* 32px */
+  }
+  .gabung-desc{
+    margin-bottom: 2.5rem;
+  }
+  .btn-profile{
+    height: 2rem;
+    margin-top: 0.25rem;
+  }
 }
