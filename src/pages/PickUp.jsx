@@ -10,8 +10,11 @@ import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
 import WarningModal from "../components/WarningModal";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../redux/slice/cart-slice";
 
 export default function PickUp() {
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
@@ -92,8 +95,6 @@ export default function PickUp() {
           pickup_date: pickupDate,
         })),
       };
-
-      // Create transaction
       await axios.post(
         "https://final-sarange-eff62c954ab5.herokuapp.com/transaction",
         requestData,
@@ -103,6 +104,7 @@ export default function PickUp() {
           },
         }
       );
+      dispatch(updateCart());
       setLoadingTransaction(false);
     } catch (error) {
       console.error("Error creating transaction:", error);
@@ -167,31 +169,47 @@ export default function PickUp() {
         </div>
       </div>
       <div className="mt-6 float-right">
-        <ButtonGreen
-          text="Atur Jadwal"
-          dataModalTrigger
-          onClick={handleSchedulePickup}
-          disabled={loadingTransaction}
-          link="/sell/transactions"
-        />
+        {loadingTransaction ? (
+          <span>
+            <ButtonGreen
+              text="Mengatur..."
+              dataModalTrigger
+              disabled={loadingTransaction}
+            />
+          </span>
+        ) : (
+          <ButtonGreen
+            text="Atur Jadwal"
+            dataModalTrigger
+            onClick={() => setOpenModal(true)}
+            disabled={loadingTransaction}
+          />
+        )}
       </div>
-      {/* <ConfirmModal
+      <ConfirmModal
         show={openModal}
+        textConfirm={loadingTransaction ? "Mengatur..." : "Ya"}
         onClose={() => setOpenModal(false)}
-        onConfirm={() => {
-          setOpenModal(false);
-          setSuccessModal(true);
+        onConfirm={async () => {
+          try {
+            await handleSchedulePickup();
+            setOpenModal(false);
+            setSuccessModal(true);
+          } catch (error) {
+            console.error("Error handling pickup:", error);
+          }
         }}
+        onClick
         header="Apakah kamu sudah yakin dengan jadwal penjemputanmu?"
-        content="Sampahmu akan dijemput pada ${pickupDate}"
+        content={`Sampahmu akan dijemput pada ${pickupDate}`}
       />
       <SuccessModal
         show={successModal}
         link="/sell/transactions"
         onClose={() => setSuccessModal(false)}
         header="Penjemputan sampahmu berhasil dijadwalkan"
-        content="Pastikan sampahmu sudah siap dan sesuai dengan ketentuan. Sampah akan dijemput pada tanggal 20 Januari 2024 antara pukul 08.00 - 17.00 WIB."
-      /> */}
+        content={`Pastikan sampahmu sudah siap dan sesuai dengan ketentuan. Sampah akan dijemput pada tanggal ${pickupDate} antara pukul 08.00 - 17.00 WIB.`}
+      />
     </div>
   );
 }

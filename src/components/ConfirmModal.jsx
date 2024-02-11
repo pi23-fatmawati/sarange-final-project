@@ -9,6 +9,7 @@ export default function ConfirmModal({
   onClose,
   header,
   content,
+  textConfirm
 }) {
   return (
     <Modal size="md" show={show} onClose={onClose} popup>
@@ -22,7 +23,7 @@ export default function ConfirmModal({
           </div>
           {onConfirm && onClose && (
             <div className="flex justify-center gap-4">
-              <ButtonGreen text="Ya" onConfirm={onConfirm} />
+              <ButtonGreen text={textConfirm} onConfirm={onConfirm} />
               <ButtonOutline text="Kembali" width="w-max" onClose={onClose} />
             </div>
           )}
