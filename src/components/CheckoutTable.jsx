@@ -116,7 +116,7 @@ const CheckoutTable = () => {
                 (p) => p.id_product === cartItem.id_product
               );
               return (
-                <tr key={cartItem.id} className="odd:bg-white even:bg-gray-50">
+                <tr key={cartItem.id_cart} className="odd:bg-white even:bg-gray-50">
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"

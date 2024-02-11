@@ -144,27 +144,27 @@ export const updateCartData = () => {
     try {
       const token = Cookies.get("token");
       const { cartItems, selectedItems } = getState().cart;
+      console.log("cart items:", cartItems)
+      const payload = cartItems.map((cartItem) => ({
+        id_cart: cartItem.id_cart,
+        total_product: cartItem.total_product,
+        is_check: selectedItems[cartItem.id_cart] || false,
+      }));
+      console.log("payload:", payload)
 
-      const updatedCartItems = await Promise.all(
-        cartItems.map(async (cartItem) => {
-          const { id_cart, total_product } = cartItem;
-          const is_check = selectedItems[id_cart] || false;
-
-          const response = await axios.patch(
-            "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
-            { id_cart, total_product, is_check },
-            {
-              headers: {
-                authorization: `${token}`,
-              },
-            }
-          );
-          const { updatedCartItem } = response.data;
-
-          dispatch(updateCart(updatedCartItem));
-          return updatedCartItem;
-        })
+      const response = await axios.patch(
+        "https://final-sarange-eff62c954ab5.herokuapp.com/cart",
+        payload,
+        {
+          headers: {
+            authorization: `${token}`,
+          },
+        }
       );
+
+      console.log("Response from server:", response.data);
+
+      const { updatedCartItems } = response.data;
 
       dispatch(updateCartSuccess(updatedCartItems));
       console.log("update:", updatedCartItems, "old:", cartItems);
