@@ -16,7 +16,7 @@ import Redeem from "./pages/Redeem";
 import FormRedeem from "./pages/Form-redeem";
 import RedeemSuccess from "./pages/Redeem-success";
 import UserProfile from "./pages/UserProfile";
-import HistoryCoin from "./pages/history-coin";
+import HistoryCoin from "./pages/History-coin";
 
 function App() {
   return (
