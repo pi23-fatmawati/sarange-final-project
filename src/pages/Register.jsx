@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
 import "../components/component.css";
 import "../App.css";
-import Logo from "../pic/logo.png";
+import Logo from "../assets/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
 import { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm, registerUser } from "../redux/slice/register-slice";
