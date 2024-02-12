@@ -5,7 +5,7 @@ import BackNavigation from "../components/BackNavigation";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export default function HistoryCoin() {
+function HistoryCoin() {
   const [selectedOption, setSelectedOption] = useState("10");
   const [coinHistory, setCoinHistory] = useState([]);
   const [coinUser, setCoinUser] = useState(0);
@@ -118,3 +118,5 @@ export default function HistoryCoin() {
     </div>
   );
 }
+
+export default HistoryCoin
