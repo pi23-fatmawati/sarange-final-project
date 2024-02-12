@@ -9,7 +9,7 @@ import authReducer from '../slice/auth-slice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['register', 'login'],
+  whitelist: ['register', 'login', 'auth'],
   serialize: true,
   deserialize: true,
 }

@@ -2,21 +2,60 @@ import CardCoin from "../components/Card-coin";
 import { useState, useEffect } from "react";
 import "../App.css";
 import BackNavigation from "../components/BackNavigation";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function HistoryCoin() {
   const [selectedOption, setSelectedOption] = useState("10");
+  const [coinHistory, setCoinHistory] = useState([]);
+  const [coinUser, setCoinUser] = useState(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const token = Cookies.get("token");
+
+        // Fetch user data
+        const userResponse = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        const { coin_user: coinUser } = userResponse.data.user;
+        setCoinUser(coinUser);
+
+        // Fetch coin history
+        const historyResponse = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/coin-history",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        setCoinHistory(historyResponse.data.data);
+        console.log(historyResponse);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+  
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
   };
-  const tableData = [
-    { date: "06-11-2023", description: "Koin bertambah", coins: "+100" },
-  ];
+
   return (
     <div className="container-page">
-        <BackNavigation page="Beranda" />
+      <BackNavigation page="Beranda" />
       <div className="history-coin">
-        <CardCoin coin={1000}></CardCoin>
+        <CardCoin coin={coinUser}></CardCoin>
         <div className="table-history mt-8 container mx-auto">
           <p>Rincian Transaksi:</p>
           <div className="dropdown-filter py-2 pl-4 w-full mt-2">
@@ -49,21 +88,29 @@ export default function HistoryCoin() {
               </tr>
             </thead>
             <tbody>
-              {tableData
+              {coinHistory && coinHistory.length > 0 ? (
+                coinHistory
                 .slice(0, parseInt(selectedOption, 10))
                 .map((item, index) => (
                   <tr key={index} className="bg-white border-b">
                     <td scope="col" className="px-6 py-4">
-                      {item.date}
+                      {new Date(item.createdAt).toLocaleDateString('id-ID')}
                     </td>
                     <td scope="col" className="px-6 py-4">
-                      {item.description}
+                      {item.desc_transaction}
                     </td>
                     <td scope="col" className="px-6 py-4">
-                      {item.coins}
+                      {item.coin_history}
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="text-center py-4">
+                    Tidak ada transaksi
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

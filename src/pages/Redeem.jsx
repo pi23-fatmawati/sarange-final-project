@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardCoin from "../components/Card-coin";
 import CardRedeem from "../components/Card-redeem";
 import '../App.css';
@@ -10,6 +10,8 @@ import Ovo from '../assets/ovo.png';
 import ButtonOutline from "../components/Button-outline";
 import { useNavigate } from "react-router-dom";
 import BackNavigation from "../components/BackNavigation";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function Redeem() {
     const data = [
@@ -19,54 +21,104 @@ export default function Redeem() {
     ];
   
     const eWalletData = [
-      { id: 1, img: Gopay },
-      { id: 2, img: Shopeepay },
-      { id: 3, img: Dana },
-      { id: 4, img: Ovo }
+      { id: 1, img: Gopay, e_wallet: 'gopay' },
+      { id: 2, img: Shopeepay, e_wallet: 'ovo' },
+      { id: 3, img: Dana, e_wallet: 'dana' },
+      { id: 4, img: Ovo, e_wallet: 'shopeepay' }
     ];
-  
+    
+    const [coinUser, setCoinUser] = useState(0);
     const [selectedCard, setSelectedCard] = useState(null);
     const [selectedEwallet, setSelectedEwallet] = useState(null);
+    const navigate = useNavigate();
   
-    const handleCardClick = (id) => {
-        const cardCoinValue = 1000;
-        const selectedCardCoin = data.find(item => item.id === id)?.coin;
-    
-        if (cardCoinValue < selectedCardCoin) {
-          alert('Koin Anda tidak cukup');
-          return;
+    useEffect(() => {
+      async function fetchUserData() {
+        try {
+          const token = Cookies.get("token");
+          const response = await axios.get(
+            "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+            {
+              headers: {
+                authorization: token,
+              },
+            }
+          );
+          const getUserData = response.data.user;
+          setCoinUser(getUserData.coin_user);
+        } catch (error) {
+          console.error("Error fetching coin", error);
         }
+      }
     
-        setSelectedCard(id);
-      };
+      fetchUserData();
+    }, []);
+    
+    const handleCardClick = (id) => {
+      const selectedCardData = data.find(item => item.id === id);
+      if (coinUser < selectedCardData.coin) {
+        alert('Koin Anda tidak cukup');
+        return;
+      }
+      setSelectedCard(selectedCardData);
+        
+    };
   
     const handleEwalletClick = (id) => {
       setSelectedEwallet(id);
     };
+
     const isAnyCardSelected = selectedCard !== null && selectedEwallet !== null;
-    const navigate = useNavigate();
-  
+
+
+    const handleClaim = async () => {
+      try {
+        if (!isAnyCardSelected) {
+          alert('Pilih jumlah dan dompet elektronik terlebih dahulu');
+          return;
+        }
+
+        const selectedCardData = data.find(item => item.id === selectedCard?.id);
+        const moneyAsNumber = parseInt(selectedCardData.money.replace(/\D/g, ''));
+        const { coin } = selectedCardData;
+
+
+        const redeemData = {
+          money_get: moneyAsNumber,
+          coin_redeem: coin,
+          e_wallet: eWalletData.find(item => item.id === selectedEwallet)?.e_wallet
+        };
+
+        console.log(redeemData);
+        Cookies.set("redeemData", JSON.stringify(redeemData), { expires: 1 })
+
+        navigate('/sell/form-redeem');
+      } catch (error) {
+        alert(error?.response?.data?.message || 'Gagal melakukan redeem');
+      }
+    }
+    
     return (
       <div className="container-page">
         <BackNavigation page="Beranda" />
         <div className="redeem-coin container mx-auto">
-          <CardCoin coin={1000}></CardCoin>
+          <CardCoin coin={coinUser}></CardCoin>
           <div className="redeem-content mt-8 flex flex-col items-center py-8">
             <div className="redeem-card flex justify-center w-full">
-              {data.map((item, index) => (
+              {data.map((item) => (
                 <CardRedeem
-                  key={index}
+                  key={item.id}
                   money={item.money}
                   coin={item.coin}
                   onClick={() => handleCardClick(item.id)}
-                  className={selectedCard === item.id ? 'selected-card' : null}
+                  className={selectedCard?.id === item.id ? 'selected-card' : null}
                 />
               ))}
             </div>
             <div className="redeem-ewallet flex flex-wrap justify-center max-w-screen-sm mt-10">
-              {eWalletData.map((item, index) => (
+              {eWalletData.map((item) => (
                 <CardEwallet
-                  key={index}
+                  key={item.id}
                   img={item.img}
                   onClick={() => handleEwalletClick(item.id)}
                   className={selectedEwallet === item.id ? 'selected-ewallet bg-zinc-200' : null}
@@ -78,7 +130,7 @@ export default function Redeem() {
                 <button 
                     className="btn-klaim px-10 text-center rounded text-white" 
                     disabled={!isAnyCardSelected}
-                    onClick={() => navigate('/sell/form-redeem')}>Klaim</button>
+                    onClick={handleClaim}>Klaim</button>
             </div>
           </div>
         </div>
