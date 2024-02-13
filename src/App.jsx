@@ -15,7 +15,7 @@ import DetailTransaction from "./pages/DetailTransaction";
 import Redeem from "./pages/Redeem";
 import FormRedeem from "./pages/Form-redeem";
 import RedeemSuccess from "./pages/Redeem-success";
-import HistoryCoin from "./pages/history-coin";
+import HistoryCoin from "./pages/History-coin";
 import UserProfile from "./pages/UserProfile";
 import Education from "./pages/Education";
 import Footer from "./components/Footer";
