@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../src/components/component.css";
 import "../../src/App.css";
-import Logo from "../pic/Logo.png";
+import Logo from "../../src/pic/Logo.png";
 import Shopping from "../../src/pic/Shopping.png";
 import NavbarRegisterLogin from "../../src/components/NavbarRegisterLogin";
 import { useDispatch, useSelector } from "react-redux";
