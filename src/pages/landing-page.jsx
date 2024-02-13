@@ -69,7 +69,7 @@ export default function LandingPage() {
           <p className="my-5">
             Gabung dengan Sarange dan rasakan kemudahan menjual sampah
           </p>
-          <Link to="/register" target="_blank">
+          <Link to="/register">
             <Button text="Gabung Sekarang" />
           </Link>
         </div>
