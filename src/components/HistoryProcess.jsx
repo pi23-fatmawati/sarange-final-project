@@ -10,10 +10,12 @@ const History = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionData, setTransactionData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProcessData = async () => {
       try {
+        setLoading(true);
         const token = Cookies.get("token");
         const response = await fetch(
           "https://final-sarange-eff62c954ab5.herokuapp.com/transaction/process",
@@ -24,20 +26,24 @@ const History = () => {
           }
         );
         const data = await response.json();
-        console.log(data);
 
         if (Array.isArray(data.transactions) && data.transactions.length > 0) {
           setTransactionData((prevData) => [...prevData, ...data.transactions]);
+          setLoading(false);
         } else {
+          setLoading(false);
           console.warn("Tidak ada data transaksi proses yang tersedia.");
         }
       } catch (error) {
         console.error("Error fetching process transaction data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchConfirmData = async () => {
       try {
+        setLoading(true);
         const token = Cookies.get("token");
         const response = await fetch(
           "https://final-sarange-eff62c954ab5.herokuapp.com/transaction/confirm",
@@ -48,14 +54,17 @@ const History = () => {
           }
         );
         const data = await response.json();
-        console.log(data);
         if (Array.isArray(data.transactions) && data.transactions.length > 0) {
           setTransactionData((prevData) => [...prevData, ...data.transactions]);
+          setLoading(false);
         } else {
+          setLoading(false);
           console.warn("Tidak ada data transaksi konfirmasi yang tersedia.");
         }
       } catch (error) {
         console.error("Error fetching confirm transaction data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -63,22 +72,18 @@ const History = () => {
     fetchConfirmData();
   }, []);
 
-  const totalPages = Math.ceil(transactionData.length / itemsPerPage);
-
   const sortedTransactions = transactionData.sort((a, b) => {
     if (a.status === "Konfirmasi" && b.status === "Diproses") return -1;
     if (a.status === "Diproses" && b.status === "Konfirmasi") return 1;
     return 0;
   });
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(
     startIndex + itemsPerPage,
     sortedTransactions.length
   );
-
   const currentTransactions = sortedTransactions.slice(startIndex, endIndex);
-
+  const totalPages = Math.ceil(currentTransactions.length / itemsPerPage);
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -96,8 +101,7 @@ const History = () => {
           },
         }
       );
-      const data = await response.json();
-      console.log(data);
+      return response.json();
     } catch (error) {
       console.error("Error confirming transaction:", error);
     }
@@ -117,10 +121,16 @@ const History = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {transactionData.length === 0 ? (
+            {loading ? (
               <tr>
                 <td colSpan="5" className="px-6 py-4">
-                  Belum ada transaksi selesai
+                  Loading...
+                </td>
+              </tr>
+            ) : transactionData.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="px-6 py-4">
+                  Belum ada transaksi
                 </td>
               </tr>
             ) : (
@@ -172,6 +182,8 @@ const History = () => {
           fontSize: "small",
           display: transactionData.length === 0 ? "none" : "block",
         }}
+        previousLabel="<<"
+        nextLabel=">>"
       />
     </>
   );

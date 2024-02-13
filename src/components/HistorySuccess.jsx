@@ -10,11 +10,13 @@ const HistorySuccess = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionData, setTransactionData] = useState([]);
+  const [loading, setLoading] = useState(false)
   const token = Cookies.get("token");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           "https://final-sarange-eff62c954ab5.herokuapp.com/transaction/success",
           {
@@ -24,15 +26,16 @@ const HistorySuccess = () => {
           }
         );
         const data = await response.json();
-        console.log(data);
-
         if (data && Array.isArray(data.transactions)) {
           setTransactionData(data.transactions);
+          setLoading(false);
         } else {
           console.error("Invalid data format:", data);
         }
       } catch (error) {
         console.error("Error fetching transaction data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -115,6 +118,8 @@ const HistorySuccess = () => {
           fontSize: "small",
           display: transactionData.length === 0 ? "none" : "block",
         }}
+        previousLabel="<<"
+        nextLabel=">>"
       />
     </>
   );

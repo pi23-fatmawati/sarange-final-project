@@ -46,7 +46,7 @@ function ProductDetail() {
           <h4 className="text-2xl font-bold text-green-2">
             <FontAwesomeIcon icon={faCoins} /> {productDetail.coin} koin
           </h4>
-          <p>
+          <div>
             <b>Ketentuan:</b>
             <br />
             <List style={{color: "black"}}>
@@ -54,7 +54,7 @@ function ProductDetail() {
                 <ListItem key={index}>{line}</ListItem>
               ))}
             </List>
-          </p>
+          </div>
         </Card>
       </div>
     </>

@@ -104,10 +104,10 @@ const CheckoutTable = () => {
           </tr>
         </thead>
         <tbody>
-          {products.length === 0 ? (
+          {cartItems.length === 0 ? (
             <tr>
               <td colSpan="5" className="px-6 py-4">
-                Loading...
+                Tidak ada produk di keranjang
               </td>
             </tr>
           ) : (

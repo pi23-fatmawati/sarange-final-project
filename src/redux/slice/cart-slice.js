@@ -106,9 +106,21 @@ export const updateCart = () => {
       );
 
       const { carts } = response.data;
+      if (carts.length === 0 ) {
+        dispatch(updateCartSuccess([]));
+        dispatch(setTotalCartItems(0));
+      }
       dispatch(updateCartSuccess(carts));
       dispatch(setTotalCartItems(calculateTotalProducts(carts)));
     } catch (error) {
+      if (
+        axios.isAxiosError(error) &&
+        error.response &&
+        error.response.status === 404
+      ) {
+        dispatch(updateCartSuccess([]));
+        dispatch(setTotalCartItems(0));
+      }
       console.error("Error fetching cart data, ", error);
     }
   };
@@ -147,7 +159,7 @@ export const updateCartData = () => {
       if (!cart) {
         console.error("Cart state is undefined or null");
         return [];
-      } 
+      }
       const { cartItems, selectedItems } = cart;
       console.log("cart items:", cartItems);
       const payload = cartItems.map((cartItem) => ({
