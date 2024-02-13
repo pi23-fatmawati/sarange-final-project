@@ -69,9 +69,7 @@ export default function LandingPage() {
           <p className="my-5">
             Gabung dengan Sarange dan rasakan kemudahan menjual sampah
           </p>
-          <Link to="/register">
-            <Button text="Gabung Sekarang" />
-          </Link>
+          <Button text="Gabung Sekarang" onClick={() => window.open("/register", "_blank")} />
         </div>
       </div>
     </>
