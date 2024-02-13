@@ -6,7 +6,7 @@ import ProductDetail from "./pages/ProductDetail";
 import HomePage from "./pages/Home";
 import NavbarSarange from "./components/Navbar-sarange";
 import Register from "./pages/Register";
-import Login from "./pages/Login";
+import Login from "../public/pages/Login";
 import Checkout from "./pages/Checkout";
 import PickUp from "./pages/PickUp";
 import "./App.css";

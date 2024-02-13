@@ -4,7 +4,7 @@ import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/Logo.png";
 import Shopping from "../pic/Shopping.png";
-import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
+import NavbarRegisterLogin from "../../src/components/NavbarRegisterLogin";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loginUser,
@@ -13,8 +13,8 @@ import {
   setPassword,
   setRememberMe,
   clearError,
-} from "../redux/slice/login-slice";
-import ButtonGreen from "../components/Button-green";
+} from "../../src/redux/slice/login-slice";
+import ButtonGreen from "../../src/components/Button-green";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
