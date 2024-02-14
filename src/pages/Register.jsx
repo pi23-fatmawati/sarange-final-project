@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
@@ -6,26 +6,78 @@ import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
+import ButtonGreen from "../components/Button-green";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
-import { setName, setEmail, setPassword, setConfirmPassword, setAgreement, setError, resetForm, registerUser } from "../redux/slice/register-slice";
+import {
+  setName,
+  setEmail,
+  setPassword,
+  setConfirmPassword,
+  setAgreement,
+  setError,
+  resetForm,
+  registerUser,
+} from "../redux/slice/register-slice";
+import SuccessModal from "../components/SuccessModal";
+import ConfirmModal from "../components/ConfirmModal";
 
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user_name, email, password, confirm_password, agreement, error } = useSelector((state) => state.register);
+  const [openModal, setOpenModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const { user_name, email, password, confirm_password, agreement, error, loading } =
+    useSelector((state) => state.register);
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    console.log("Handle Register function dipanggil");
+    const handleRegister = async (event) => {
+      event.preventDefault();
+    
+      try {
+        if (!user_name || !email || !password || !confirm_password) {
+          dispatch(setError("Semua kolom harus diisi"));
+          return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          dispatch(setError("Format email tidak valid"));
+          return;
+        }
+        if (password !== confirm_password) {
+          dispatch(setError("Password dan konfirmasi password harus sama"));
+          return;
+        }
+        if (!agreement) {
+          dispatch(setError("Harap setujui syarat dan ketentuan yang berlaku"));
+          return;
+        }
+        const response = dispatch(
+          registerUser({
+            user_name,
+            email,
+            password,
+            confirm_password,
+            agreement,
+          })
+        );
+        if (response) {
+          navigate("/sell/profile");
+          setSuccessModal(true);
+          resetForm();
+        }
+      } catch (error) {
+        console.log(error);
+      } 
+    };
+    
+  useEffect(() => {
+    if (successModal) {
+      const timer = setTimeout(() => {
+        navigate("/sell/profile");
+      }, 4000);
 
-    dispatch(registerUser({ user_name, email, password }))
-      .then(() => {
-        navigate("/sell/profile")
-      })
-      .catch((error) => {
-        console.error("error registering", error);
-      })
-  };
+      return () => clearTimeout(timer);
+    }
+  }, [successModal, navigate]);
 
   return (
     <>
@@ -61,7 +113,7 @@ const Register = () => {
             </h1>
             <img
               src={Logo}
-              alt=""
+              alt="Sarange Icon"
               style={{ height: "100%", marginLeft: "auto" }}
             />
           </div>
@@ -70,7 +122,7 @@ const Register = () => {
               <div className="mb-4">
                 <input
                   type="text"
-                  placeholder="Nama"
+                  placeholder="Nama Lengkap"
                   className="mt-1 p-2 w-full border rounded-md"
                   value={user_name}
                   onChange={(e) => dispatch(setName(e.target.value))}
@@ -114,13 +166,13 @@ const Register = () => {
                   Saya menyetujui syarat dan ketentuan yang berlaku
                 </label>
               </div>
-              {error && <p className="text-red-500">{error}</p>}
-              <button
-                className="w-full btn-green py-1.5 font-medium rounded text-white"
+              {error && <p className="text-red-500 text-sm mb-1">{error}</p>}
+              <ButtonGreen
+                text={loading ? "Memeriksa Data..." : "Daftar"}
+                width="w-full"
                 onClick={handleRegister}
-              >
-                Daftar
-              </button>
+                disabled={loading}
+              />
             </form>
             <p className="mt-4">
               Sudah punya akun?{" "}
@@ -138,6 +190,19 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+        header="Email sudah terdaftar."
+        content="Silakan login atau daftar dengan email lain."
+      />
+      <SuccessModal
+        show={successModal}
+        onClose={() => setSuccessModal(false)}
+        header="Registrasi berhasil"
+        content={`Sedang mengarahkan ke halaman profil...
+        Silakan lengkapi profilmu terlebih dahulu sebelum melakukan transaksi.`}
+      />
     </>
   );
 };

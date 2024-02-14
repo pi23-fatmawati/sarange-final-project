@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
 import HeaderPage from "../components/HeaderPage";
+import { getProduct } from "../redux/slice/product-slice";
+import { getUserBasicInfo } from "../redux/slice/user-slice";
 
 function Product() {
-  const URL = "https://656bda9ee1e03bfd572ddc89.mockapi.io/sarange/listSampah";
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.product.product);
+  const userBasicInfo = useSelector((state) => state.user_basic_info);
 
   useEffect(() => {
-    getDataProduct();
-  }, []);
+    dispatch(getProduct());
+    dispatch(getUserBasicInfo());
+  }, [dispatch]);
 
-  const getDataProduct = async () => {
-    try {
-      const response = await fetch(URL);
-      const productsData = await response.json();
-      setProducts(productsData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  if (products.length === 0) {
+  if (products.length === 0 || !userBasicInfo) {
     return (
       <div className="container-page flex justify-center items-center">
         Loading...
@@ -31,22 +27,19 @@ function Product() {
     <>
       <div className="container-page flex flex-col gap-4 w-full">
         <HeaderPage
-          title="Hai user, mau jual apa hari ini?"
+          title={`Hai ${userBasicInfo.data.user_name}, mau jual apa hari ini?`}
           subtitle="Yuk, jaga bumi dan dapatkan koin dari setiap penjualan sampahmu!"
         />
-        <div
-          className="flex flex-wrap w-full justify-center gap-5 items-start"
-          id="product-card"
-        >
-          {products.map((product) => {
+        <div className="flex flex-wrap w-full justify-center gap-5 items-start">
+          {products.map((product, index) => {
             return (
               <ProductCard
-                key={product.id}
-                id={product.id}
-                imgSrc={product.img}
-                imgAlt={product.nama}
-                title={product.nama}
-                coin={product.koin}
+                key={index}
+                id={product.id_product}
+                imgSrc={product.product_pic}
+                imgAlt={product.product_name}
+                title={product.product_name}
+                coin={product.coin}
               />
             );
           })}

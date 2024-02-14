@@ -4,6 +4,7 @@ import { useState } from "react";
 import "./component.css";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import ButtonGreen from "./Button-green";
 
 export default function NavbarLandingPage() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -17,7 +18,7 @@ export default function NavbarLandingPage() {
   return (
     <nav
       style={{ backgroundColor: "#D3F8B7" }}
-      className="fixed m-0 p-0 w-full top-0"
+      className="fixed m-0 p-0 w-full top-0 z-20"
     >
       <div className="navbar-content max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <HashLink
@@ -28,11 +29,11 @@ export default function NavbarLandingPage() {
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </HashLink>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Link to="/login">
-            <Button
+          <Link to="/login" target="_blank">
+            <ButtonGreen
               className="focus:ring-4 focus:outline-none font-medium text-sm px-4 py-2 text-center"
               text="Login Sarange"
-            ></Button>
+            />
           </Link>
           <button
             data-collapse-toggle="navbar-sticky"
@@ -97,7 +98,7 @@ export default function NavbarLandingPage() {
             </li>
             <li>
               <Link
-                to={"/Contact"}
+                to={"/contact"}
                 className="nav-link block py-2 px-3 rounded md:p-0"
                 onClick={() => handleClickedLink("Kontak")}
                 style={{
@@ -110,7 +111,7 @@ export default function NavbarLandingPage() {
             </li>
             <li>
               <Link
-                to={"/Edukasi"}
+                to={"/education"}
                 className="nav-link block py-2 px-3 rounded md:p-0"
                 onClick={() => handleClickedLink("Edukasi")}
                 style={{

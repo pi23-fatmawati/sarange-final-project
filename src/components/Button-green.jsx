@@ -4,7 +4,9 @@ export default function ButtonGreen({
   dataModalTrigger,
   onClick,
   onConfirm,
-  padding
+  padding,
+  width,
+  disabled,
 }) {
   const handleClick = (e) => {
     if (onConfirm) {
@@ -13,14 +15,20 @@ export default function ButtonGreen({
       onClick(e);
     }
   };
-  const buttonClasses = `btn-green py-1.5 ${padding || 'px-7'} font-normal rounded-lg text-white`;
+  const buttonClasses = `btn-green py-1.5 ${
+    padding || "px-7"
+  } font-normal rounded-lg text-white ${width} || 'w-full' ${
+    disabled ? "disabled" : ""
+  }`;
   return (
     <button
       className={buttonClasses}
       data-modal-trigger={dataModalTrigger}
       onClick={handleClick}
+      disabled={disabled}
     >
       {text}
     </button>
   );
 }
+

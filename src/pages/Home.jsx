@@ -5,6 +5,8 @@ import Image1 from "../assets/carousel-1.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserBasicInfo } from "../redux/slice/user-slice";
 
 export default function HomePage() {
   const slides = [Image1, Image1, Image1];
@@ -21,6 +23,19 @@ export default function HomePage() {
     const slideInterval = setInterval(next, autoSlideInterval);
     return () => clearInterval(slideInterval);
   }, []);
+
+  const dispatch = useDispatch();
+  const { data: userData, isLoading } = useSelector(
+    (state) => state.user_basic_info
+  );
+
+  useEffect(() => {
+    dispatch(getUserBasicInfo());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div className="container-page text-center">Loading...</div>;
+  }
   return (
     <>
       <div className="home container mx-auto flex items-center justify center max-w-screen-lg">
@@ -28,7 +43,9 @@ export default function HomePage() {
           <img className="w-full" src={Home} alt="image home" />
         </div>
         <div className="text-home flex flex-col gap-1 container mx-auto absolute text-center justify-center items-center w-full right-0 left-0 mt-5">
-          <p className="text-xl font-medium">Hai User! Terima kasih, ya</p>
+          <p className="text-xl font-medium">
+            Hai {userData.user_name || "User"}! Terima kasih, ya
+          </p>
           <h1 className="text-3xl font-bold py-1">
             10kg CO<sub>2</sub>
           </h1>
@@ -48,8 +65,11 @@ export default function HomePage() {
           className="coin-user flex items-center gap-2 mx-auto"
         >
           <img src={Coin} className="w-auto max-h-12" alt="coin image" />
-          <h1 className="font-semibold text-2xl">1.000</h1>
-          <p className="font-medium">Koin</p>
+          <h1 className="font-semibold text-xl">
+            {userData.coin_user !== null && userData.coin_user !== undefined
+              ? `${userData.coin_user} Koin`
+              : "0 Koin"}
+          </h1>
         </Link>
         <div className="line"></div>
         <Link
@@ -57,7 +77,7 @@ export default function HomePage() {
           className="redeem-coin flex items-center gap-2 mx-auto"
         >
           <img src={Redeem} className="w-auto max-h-12" alt="reedem image" />
-          <p className="font-semibold text-lg">Tukar Koin</p>
+          <p className="font-semibold text-xl">Tukar Koin</p>
         </Link>
       </div>
       <div className="carousel container mx-auto mt-5 max-w-screen-lg">
@@ -71,23 +91,25 @@ export default function HomePage() {
                   transform: `translateX(-${curr * 100}%)`,
                   width: "100%",
                 }}
-                onClick={()=> window.open(pathname.replace('home', 'edukasi'))}
+                onClick={()=> window.open('/education')}
               >
                 {slides.map((s, index) => (
                   <img
                     className="block w-full object-cover mx-0"
-                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                    style={{ maxHeight: "100%", maxWidth: "100%", cursor: "pointer"}}
                     key={index}
                     src={s}
                     alt={`slide-${index}`}
                   />
                 ))}
               </div>
-              <div className="absolute">
-                <button onClick={prev} className='p-1  right-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
+              <div className="absolute top-0 bottom-0 left-0 flex items-center">
+                <button onClick={prev} className='p-1 absolute left-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
                   <ChevronLeft />
                 </button>
-                <button onClick={next} className='p-1 left-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
+              </div>
+              <div className="absolute top-0 bottom-0 right-0 flex items-center">
+                <button onClick={next} className='p-1 absolute right-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
                   <ChevronRight />
                 </button>
               </div>

@@ -1,25 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/full-logo-sarange.svg";
 import ButtonOutline from "./Button-outline";
 import ButtonGreen from "./Button-green";
-import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/slice/auth-slice";
 import profilePicture from '../assets/profile.png'
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 
 export default function NavbarSarange() {
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [clickedLink, setClickedLink] = useState("Beranda");
-  const [profilePic, setProfilePic] = useState("");
+  const [profilePic, setProfilePic] = useState({profilePicture});
   const [userData, setUserData] = useState(null)
   const [isLogin, setIsLogin] = useState(true);
   const [isRegister, setIsRegister] = useState(true)
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const profileButtonRef = useRef(null);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetchProfileData() {
@@ -40,9 +39,10 @@ export default function NavbarSarange() {
         console.error("Error fetching profile pic:", error);
       }
     }
-
+  
     fetchProfileData();
-  }, []);
+  }, []);  
+
 
   useEffect(() => {
     if (!Cookies.get("token")) {
@@ -64,13 +64,13 @@ export default function NavbarSarange() {
 
   const handleLogout = () => {
     dispatch(logoutUser())
-    .then(() => {
-      navigate("/login")
-    })
-    .catch((error) => {
-      console.error('error', error);
-    })
-  }
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  };
 
   return (
     <nav
@@ -79,13 +79,13 @@ export default function NavbarSarange() {
     >
       <div className="navbar-content max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
-          to={"/home"}
+          to={"/sell/home"}
           className="nav-img flex items-center space-x-3 rtl:space-x-reverse"
         >
           <img src={Logo} className="h-9" alt="Sarange Logo" />
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0">
-          {isLogin || isRegister ? (
+        {isLogin || isRegister ? (
             <button
             type="button"
             className="btn-profile flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300"
@@ -95,20 +95,16 @@ export default function NavbarSarange() {
             aria-controls="user-dropdown"
             data-dropdown-toggle="user-dropdown"
             data-dropdown-placement="bottom"
-            ref={profileButtonRef}
           >
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={profilePic}
+              src={profilePic ? profilePic : profilePicture }
               alt="user photo"
             />
-          </button>
-          ) : (
+          </button> ) : (
             <ButtonGreen text="Login Sekarang" onClick={() => navigate("/login")}></ButtonGreen>
           )}
-          
-          {/* Dropdown */}
           <div
             className={`z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 top-10 right-2 absolute ${
               isProfileOpen ? "block" : "hidden"
@@ -117,17 +113,17 @@ export default function NavbarSarange() {
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 font-bold text-center">
-                {userData && userData.user_name}
+                {userData?.user_name}
               </span>
               <span className="block text-sm  text-gray-500 truncate text-center">
-                {userData && userData.email}
+                {userData?.email}
               </span>
             </div>
             <div className="button-popup-profile mx-4 flex flex-col gap-2 p-4">
               <Link to="/sell/profile">
-                <ButtonGreen text="Lihat Profile"></ButtonGreen>
+                <ButtonGreen text="Lihat Profile" />
               </Link>
-              <ButtonOutline text="Logout" onClick={handleLogout}></ButtonOutline>
+              <ButtonOutline text="Logout" onClick={handleLogout} />
             </div>
           </div>
           <button
@@ -213,12 +209,9 @@ export default function NavbarSarange() {
             </li>
             <li>
               <Link
-                to={"/sell/education"}
+                to={"/education"}
+                target="_blank"
                 className="nav-link block py-2 px-3 rounded md:p-0"
-                onClick={() => {
-                  handleClickedLink("Edukasi");
-                  navigate("/sell/education");
-                }}
                 style={{
                   color: clickedLink === "Edukasi" ? "#52C41A" : "grey",
                 }}

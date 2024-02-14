@@ -4,9 +4,9 @@ import Tab from "../components/Tab";
 
 export default function Transactions() {
   return (
-    <div className='container-page'>
-        <BackNavigation page="Riwayat Transaksi" icon={faHistory} />
-        <Tab />
+    <div className="container-page">
+      <BackNavigation page="Riwayat Transaksi" icon={faHistory} />
+      <Tab />
     </div>
-  )
+  );
 }

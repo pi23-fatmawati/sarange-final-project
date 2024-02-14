@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormImage from '../assets/form-redeem.png';
 import ButtonGreen from '../components/Button-green';
@@ -12,6 +12,29 @@ export default function FormRedeem() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [error, setError] = useState('');
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        async function fetchProfile() {
+            try {
+                const token = Cookies.get("token");
+                const response = await axios.get(
+                    "https://final-sarange-eff62c954ab5.herokuapp.com/profile",
+                    {
+                        headers: {
+                            authorization: `${token}`,
+                        },
+                    }
+                );
+                setEmail(response.data.user.email);
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        }
+
+        fetchProfile();
+    }, []);
 
     const submitPhoneNumber = () => {
         if (phoneNumber.trim() === '') {
@@ -35,8 +58,10 @@ export default function FormRedeem() {
                 },
               }
             );
+            setLoading(false)
             navigate('/sell/redeem-success');
         } catch (error) {
+            setLoading(false)
             setError('Gagal mengirim nomor telepon');
             console.error('Error post data', error);
         }
@@ -62,14 +87,14 @@ export default function FormRedeem() {
             </div>
             <div className="btn-form flex gap-8">
                 <ButtonOutline text='Kembali' onClick={()=> navigate(-1)}></ButtonOutline>
-                <ButtonGreen text='Kirim' onClick={submitPhoneNumber}></ButtonGreen>
+                <ButtonGreen text={loading ? 'Mengirim...' : 'Kirim'} onClick={submitPhoneNumber}></ButtonGreen>
             </div>
             {showPopup && (
                 <div className="popup flex justify-center fixed items-center h-full w-full top-0 left-0 bg-black bg-opacity-50">
                     <div className="popup-content bg-white p-8 flex flex-col items-center justify-center font-semibold gap-1 rounded-lg">
                         <img src={LogoIcon} alt="Logo Icon" />
                         <p>Nomor: {phoneNumber}</p>
-                        <p>Email: example@example.com</p>
+                        <p>Email: {email}</p>
                         <p className='w-60 text-center'>Pastikan nomor handphone dan email anda sudah benar</p>
                         <p className="text-red-500">{error}</p>
                         <div className="btn-popup flex gap-4 mt-4">

@@ -1,57 +1,60 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Card } from "flowbite-react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductById } from "../redux/slice/product-slice";
+import { Card, List, ListItem } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import BackNavigation from "../components/BackNavigation";
 
 function ProductDetail() {
   const { id } = useParams();
-  const [product, setProducts] = useState(null);
+  const dispatch = useDispatch();
+  const productDetail = useSelector((state) => state.product.productDetail);
+  const isLoading = useSelector((state) => state.product.isLoading);
 
   useEffect(() => {
-    const fetchProductDetail = async () => {
-      try {
-        const response = await fetch(
-          `https://656bda9ee1e03bfd572ddc89.mockapi.io/sarange/listSampah/${id}`
-        );
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchProductDetail();
-  }, [id]);
+    dispatch(getProductById(id));
+  }, [dispatch, id]);
 
-  if (!product) {
+  if (isLoading) {
     return (
       <div className="container-page flex justify-center items-center">
         Loading...
       </div>
     );
   }
+
+  if (!productDetail) {
+    return (
+      <div className="container-page flex justify-center items-center">
+        Gagal menampilkan produk.
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="container-page">
         <BackNavigation page="Jual Sampah" />
         <Card
           className="detail-card md:max-w-full gap-3"
-          imgSrc={product.img}
+          imgSrc={productDetail.product_pic}
           horizontal
         >
-          <h5 className="text-2xl font-medium">{product.nama}</h5>
+          <h5 className="text-2xl font-medium">{productDetail.product_name}</h5>
           <h4 className="text-2xl font-bold text-green-2">
-            <FontAwesomeIcon icon={faCoins} /> {product.koin} koin
+            <FontAwesomeIcon icon={faCoins} /> {productDetail.coin} koin
           </h4>
-          <ul>
+          <p>
             <b>Ketentuan:</b>
-            {product.deskripsi.map((item) => (
-              <li key={id} className="list-disc">
-                {item}
-              </li>
-            ))}
-          </ul>
+            <br />
+            <List style={{color: "black"}}>
+              {productDetail.description.split("\n").map((line, index) => (
+                <ListItem key={index}>{line}</ListItem>
+              ))}
+            </List>
+          </p>
         </Card>
       </div>
     </>

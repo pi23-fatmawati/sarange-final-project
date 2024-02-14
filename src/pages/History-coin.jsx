@@ -9,6 +9,7 @@ export default function HistoryCoin() {
   const [selectedOption, setSelectedOption] = useState("10");
   const [coinHistory, setCoinHistory] = useState([]);
   const [coinUser, setCoinUser] = useState(0);
+  const [userId, setUserId] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -24,8 +25,9 @@ export default function HistoryCoin() {
             },
           }
         );
-        const { coin_user: coinUser } = userResponse.data.user;
+        const { coin_user: coinUser, id_user: userId } = userResponse.data.user;
         setCoinUser(coinUser);
+        setUserId(userId);
 
         // Fetch coin history
         const historyResponse = await axios.get(
@@ -34,17 +36,19 @@ export default function HistoryCoin() {
             headers: {
               Authorization: token,
             },
-          }
+          },
         );
-        setCoinHistory(historyResponse.data.data);
-        console.log(historyResponse);
+        const filteredCoinHistory = historyResponse.data.data.filter(item => item.id_user === userId)
+        setCoinHistory(filteredCoinHistory);
+        console.log(filteredCoinHistory);
+        console.log(historyResponse.data.data.id_user);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     }
 
     fetchData();
-  }, []);
+  }, [userId]);
   
 
   const handleSelectChange = (event) => {
@@ -55,7 +59,8 @@ export default function HistoryCoin() {
     <div className="container-page">
       <BackNavigation page="Beranda" />
       <div className="history-coin">
-        <CardCoin coin={coinUser}></CardCoin>
+        <CardCoin coin={coinUser !== null &&coinUser !== undefined
+              ? `${coinUser}` : "0"}></CardCoin>
         <div className="table-history mt-8 container mx-auto">
           <p>Rincian Transaksi:</p>
           <div className="dropdown-filter py-2 pl-4 w-full mt-2">

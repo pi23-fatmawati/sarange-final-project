@@ -7,7 +7,6 @@ import Aman from "../assets/aman.png";
 import Terpercaya from "../assets/terpercaya.png";
 import Gabung from "../assets/gabung-sekarang.png";
 import Button from "../components/Button";
-import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
@@ -70,12 +69,11 @@ export default function LandingPage() {
           <p className="my-5">
             Gabung dengan Sarange dan rasakan kemudahan menjual sampah
           </p>
-          <Link to="/register">
+          <Link to="/register" target="_blank">
             <Button text="Gabung Sekarang" />
           </Link>
         </div>
       </div>
-      <Footer></Footer>
     </>
   );
 }

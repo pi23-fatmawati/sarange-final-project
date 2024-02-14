@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../components/component.css";
 import "../App.css";
@@ -6,31 +6,53 @@ import Logo from "../pic/logo.png";
 import Shopping from "../pic/shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, setEmail, setError, setPassword, setRememberMe } from "../redux/slice/login-slice";
+import {
+  loginUser,
+  setEmail,
+  setError,
+  setPassword,
+  setRememberMe,
+  clearError,
+} from "../redux/slice/login-slice";
+import ButtonGreen from "../components/Button-green";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { email, password, rememberMe, error } = useSelector((state) => state.login)
+  const { email, password, rememberMe, error, loading } = useSelector(
+    (state) => state.login
+  );
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log("Handle Login function dipanggil");
-    dispatch(loginUser({ email, password }))
-      .then(() => {
+    dispatch(clearError());
+    try {
+      if (!email || !password) {
+        dispatch(setError("Email dan password harus diisi"));
+        return;
+      }
+      const response = await dispatch(loginUser({ email, password }));
+      if (response.status === 200) {
         navigate("/sell/home");
-      })
-      .catch((error) => {
-        console.error('error', error);
-      })
-      
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   return (
     <>
       <NavbarRegisterLogin />
       <div
-        className=" flex flex-col lg:flex-row container-register"
+        className="flex flex-col lg:flex-row container-register"
         style={{
           height: "100vh",
           alignItems: "center",
@@ -39,7 +61,7 @@ const Login = () => {
       >
         <img src={Shopping} alt="shopping img" className="shopping-img" />
         <div
-          className="container-regis lg:flex-1 container  mt-10 border p-4 rounded-md "
+          className="container-regis lg:flex-1 min-h-[450px] container justify-between mt-10 border p-4 rounded-md "
           style={{ maxWidth: "450px" }}
         >
           <div
@@ -90,19 +112,22 @@ const Login = () => {
                   onChange={(e) => dispatch(setRememberMe(e.target.checked))}
                 />
                 <label className="text-sm font-medium text-gray-600">
-                  Ingatkan saya
+                  Ingat saya
                 </label>
               </div>
-                {error && <p className="text-red-500">{error}</p>}
-              <div className="mb-4">
-                <button
-                  className="w-full btn-green py-1.5 font-medium rounded text-white"
-                  onClick={handleLogin}
-                >
-                  Masuk
-                </button>
-              </div>
             </form>
+            <div className="mt-16 mb-4">
+              {loading && <p>Memeriksa Data...</p>}
+              {error && !loading && (
+                <p className="text-red-500 text-sm mb-1">{error}</p>
+              )}
+              <ButtonGreen
+                width="w-full"
+                text={loading ? <FontAwesomeIcon icon={faSpinner} /> : "Masuk"}
+                onClick={handleLogin}
+                disabled={loading}
+              />
+            </div>
             <p className="mt-4">
               Baru di Sarange?{" "}
               <Link

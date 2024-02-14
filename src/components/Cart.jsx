@@ -1,10 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCart } from "../redux/slice/cart-slice";
+import { useEffect } from "react";
 
 export default function Cart() {
-  const cartItems = useSelector(state => state.cart.cartItems) || [];
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  useEffect(() => {
+    dispatch(updateCart());
+  }, [dispatch]);
 
   return (
     <>
@@ -13,7 +20,7 @@ export default function Cart() {
           <FontAwesomeIcon icon={faBagShopping} className="text-3xl" />
           <div
             id="count-item"
-            className="font-medium"
+            className="font-medium text-lg"
             style={{ display: cartItems.length === 0 ? "none" : "block" }}
           >
             {cartItems.length}

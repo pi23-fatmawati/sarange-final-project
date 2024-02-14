@@ -102,7 +102,8 @@ export default function Redeem() {
       <div className="container-page">
         <BackNavigation page="Beranda" />
         <div className="redeem-coin container mx-auto">
-          <CardCoin coin={coinUser}></CardCoin>
+          <CardCoin coin={coinUser !== null &&coinUser !== undefined
+              ? `${coinUser}` : "0"}></CardCoin>
           <div className="redeem-content mt-8 flex flex-col items-center py-8">
             <div className="redeem-card flex justify-center w-full">
               {data.map((item) => (

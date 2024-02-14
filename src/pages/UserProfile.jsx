@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from "react";
-// import userImage from "../pic/profilepic0.png";
-import NavbarSarange from "../components/Navbar-sarange";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import InputProfile from "../components/InputProfile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ButtonGreen from "../components/Button-green";
+import ButtonOutline from "../components/Button-outline";
+import SuccessModal from "../components/SuccessModal";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const UserProfile = () => {
+  const [successModal, setSuccessModal] = useState(false);
   const [userData, setUserData] = useState({
     nama: "",
     email: "",
     nomorHp: "",
     alamat: "",
+    profile_pic: "",
   });
-
   const [isEditing, setIsEditing] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState();
-
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   const fetchUserProfile = async () => {
     try {
@@ -38,11 +40,10 @@ const UserProfile = () => {
         email: userProfileData.email,
         nomorHp: userProfileData.phone_number,
         alamat: userProfileData.address,
+        profile_pic: userProfileData.profile_pic,
       });
-
-      // Update imageUrl based on the user's profile picture
-      // console.log(userProfileData.profile_pic);
       setImageUrl(userProfileData.profile_pic);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
       if (error.response) {
@@ -83,7 +84,6 @@ const UserProfile = () => {
       formData.append("user_name", userData.nama);
       formData.append("phone_number", userData.nomorHp);
       formData.append("address", userData.alamat);
-      // Append image
       if (selectedImage) {
         formData.append("image", selectedImage);
       }
@@ -97,115 +97,130 @@ const UserProfile = () => {
       );
 
       setIsEditing(false);
-      fetchUserProfile(); // Fetch updated profile after saving changes
+      setSuccessModal(true);
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        profile_pic: imageUrl,
+      }));
     } catch (error) {
       console.error("Error saving profile:", error);
     }
   };
 
+  const handleDeletePhoto = () => {
+    setSelectedImage(null);
+    setImageUrl(null);
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  if (loading) {
+    return <div className="container-page text-center">Loading...</div>;
+  }
+
   return (
-    <>
-      <NavbarSarange />
-      <div className="max-w-screen-s-m-xl mt-20 mx-4 md:mx-32 bg-white rounded border">
+    <div className="container-page">
+      <div className="max-w-screen-s-m-xl mx-4 md:mx-20 bg-white rounded border">
         <div className="border-b px-6 py-3">
           <h2 className="text-xl font-semibold">Informasi Pengguna</h2>
         </div>
         <div className="p-4 md:p-6">
-          <div>
-            <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">Nama</label>
+          <div className="flex flex-col gap-3">
+            <div className="profile-item">
+              <label>Nama</label>
               {isEditing ? (
-                <input
+                <InputProfile
                   type="text"
                   name="nama"
                   value={userData.nama || ""}
                   onChange={handleChange}
-                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
               ) : (
-                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
-                  {userData.nama}
-                </div>
+                <InputProfile type="text" value={userData.nama} disabled />
               )}
             </div>
-            <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">Email</label>
+            <div className="profile-item">
+              <label>Email</label>
               {isEditing ? (
-                <input
+                <InputProfile
                   type="email"
                   name="email"
                   value={userData.email || ""}
                   onChange={handleChange}
-                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
               ) : (
-                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
-                  {userData.email}
-                </div>
+                <InputProfile type="text" value={userData.email} disabled />
               )}
             </div>
-            <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">No Hp</label>
+            <div className="profile-item">
+              <label>No Hp</label>
               {isEditing ? (
-                <input
+                <InputProfile
                   type="tel"
                   name="nomorHp"
                   value={userData.nomorHp || ""}
                   onChange={handleChange}
-                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
               ) : (
-                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1">
-                  {userData.nomorHp}
-                </div>
+                <InputProfile type="text" value={userData.nomorHp} disabled />
               )}
             </div>
-            <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">Alamat</label>
+            <div className="profile-item">
+              <label>Alamat</label>
               {isEditing ? (
-                <textarea
+                <InputProfile
+                  type="text-area"
                   name="alamat"
                   value={userData.alamat || ""}
                   onChange={handleChange}
-                  className="text-gray-600 w-3/4 md:w-2/3 lg:w-2/2 border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-blue-500"
                 />
               ) : (
-                <div className="w-3/4 md:w-2/3 lg:w-2/3 border border-gray-300 rounded-md px-2 py-1 h-16">
-                  {userData.alamat}
-                </div>
+                <InputProfile
+                  type="text-area"
+                  value={userData.alamat}
+                  disabled
+                />
               )}
             </div>
-            {/* Sisipkan gambar */}
-            <div className="flex mb-4">
-              <label className="block text-gray-600 w-1/4">Foto</label>
-              <div className="w-3/4 md:w-2/3 lg:w-1/2">
-                {isEditing ? (
-                  <>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="mb-2"
-                    />
-                    {selectedImage && (
-                      <img
-                        src={URL.createObjectURL(selectedImage)}
-                        alt="Selected User Image"
-                        className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mb-2"
-                      />
-                    )}
-                  </>
-                ) : (
-                  <img
-                    src={imageUrl}
-                    alt="User Image"
-                    className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mr-4"
+            <div className="profile-item">
+              <label>Foto</label>
+              {isEditing ? (
+                <div className="flex flex-col gap-3 w-3/4 md:w-2/3 lg:w-2/3">
+                  <InputProfile
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
                   />
-                )}
-                <label>svg, png, jpg or gif (max 800x400px)</label>
-              </div>
+                  {selectedImage && (
+                    <div className="flex flex-col gap-3">
+                      <div className="flex gap-6 items-center text-xl text-red-600">
+                        <img
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Selected User Image"
+                          className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full"
+                        />
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          onClick={() => handleDeletePhoto()}
+                          className="cursor-pointer"
+                        />
+                      </div>
+                      <div className="pic">
+                        svg, png, atau jpg (max 800x400px)
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <img
+                  src={userData.profile_pic}
+                  alt="User Image"
+                  className="w-20 h-20 md:w-16 md:h-16 lg:w-24 lg:h-24 rounded-full mr-4"
+                />
+              )}
             </div>
-            {/* Sisipkan gambar */}
           </div>
         </div>
         <div
@@ -213,24 +228,28 @@ const UserProfile = () => {
           className="px-4 py-4 rounded p-0 flex justify-end border-t"
         >
           {isEditing ? (
-            <button
-              onClick={handleSaveProfile}
-              className="btn-green py-1.5 px-7 font-medium rounded text-white"
-            >
-              Save
-            </button>
+            <div className="buttons flex gap-4">
+              <ButtonOutline
+                text="Kembali"
+                width="w-max"
+                onClick={() => setIsEditing(false)}
+              />
+              <ButtonGreen
+                onClick={handleSaveProfile}
+                text="Simpan"
+              />
+            </div>
           ) : (
-            //<Button onClick={handleSaveProfile} text="Save Profile" />
-            <button
-              onClick={handleToggleEdit}
-              className="btn-green py-1.5 px-7 font-medium rounded text-white"
-            >
-              Edit
-            </button>
+            <ButtonGreen onClick={handleToggleEdit} text="Edit Profil" />
           )}
         </div>
       </div>
-    </>
+      <SuccessModal
+        show={successModal}
+        onClose={() => setSuccessModal(false)}
+        header="Berhasil Disimpan"
+      />
+    </div>
   );
 };
 
