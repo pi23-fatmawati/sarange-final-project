@@ -12,9 +12,11 @@ import WarningModal from "../components/WarningModal";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { updateCart } from "../redux/slice/cart-slice";
+import { useNavigate } from "react-router-dom";
 
 export default function PickUp() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [userData, setUserData] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
@@ -23,8 +25,6 @@ export default function PickUp() {
   const [loadingUserData, setLoadingUserData] = useState(true);
   const [loadingCartData, setLoadingCartData] = useState(true);
   const [loadingTransaction, setLoadingTransaction] = useState(false);
-  const [isPhoneNumberFilled, setIsPhoneNumberFilled] = useState(false);
-  const [isAddressFilled, setIsAddressFilled] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +71,11 @@ export default function PickUp() {
     fetchData();
   }, []);
 
+  const handleEditProfile = () => {
+    navigate("/sell/profile")
+    console.log("page");
+  }
+
   const handleChangeUserData = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
@@ -80,13 +85,7 @@ export default function PickUp() {
         [name]: value,
       },
     }));
-    console.log(value);
-    const inputValue = value.trim() !== '';
-    if (name === 'address') {
-      setIsAddressFilled(inputValue);
-    } else if (name === 'phone_number') {
-      setIsPhoneNumberFilled(inputValue);
-  }
+    
   };
 
   const handlePickupDateChange = (newDate) => {
@@ -121,6 +120,17 @@ export default function PickUp() {
     }
   };
 
+  const handleConfirmPickup = () => {
+    if (!userData.user.address || !userData.user.phone_number || userData.user.address === 'null' || userData.user.phone_number === 'null')  {
+      alert("Mohon isi alamat dan nomor handphone anda");
+    } else if (!pickupDate) {
+      alert("Mohon isi tanggal penjemputan")
+    }
+    else {
+      setOpenModal(true);
+    }
+  }
+
   if (loadingUserData || loadingCartData) return <p>Loading...</p>;
 
   return (
@@ -142,7 +152,12 @@ export default function PickUp() {
             className="rounded-lg"
             type="text"
             value={userData.user.phone_number}
-            onChange={handleChangeUserData}
+          
+            onClick={() => {
+              if (!userData.user.phone_number || userData.user.phone_number === 'null') {
+                handleEditProfile()
+              }
+            }}
           />
           <div className="flex flex-col w-full gap-2 border border-solid border-grey-2 rounded-lg py-2 px-4">
             <div className="font-medium p-2">Alamat Penjemputan</div>
@@ -158,7 +173,11 @@ export default function PickUp() {
                 <textarea
                   className="rounded-lg w-full"
                   value={userData.user.address}
-                  onChange={handleChangeUserData}
+                  onClick={() => {
+                    if (!userData.user.address || userData.user.address === 'null') {
+                      handleEditProfile()
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -190,13 +209,7 @@ export default function PickUp() {
           <ButtonGreen
             text="Atur Jadwal"
             dataModalTrigger
-            onClick={() => {
-              if (!isAddressFilled || !isPhoneNumberFilled ) {
-                alert('Mohon isi alamat dan nomor telepon anda terlebih dahulu')
-              } else {
-                setOpenModal(true)
-              }
-            }}
+            onClick={handleConfirmPickup}
             disabled={loadingTransaction}
           />
         )}

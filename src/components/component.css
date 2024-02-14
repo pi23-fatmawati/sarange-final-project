@@ -119,4 +119,13 @@ input.count-checkout[type=number] {
     .card-redeem-content h1{
         font-size: 1rem; /* 24px */
     }
+    .card-coin img {
+        width: 40px;
+    }
+    .card-coin h1 {
+        font-size: 20px;
+    }
+    .card-coin p {
+        font-size: 15px;
+    }
 }

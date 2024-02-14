@@ -120,13 +120,46 @@
     margin-left: 1.25rem; /* 20px */
     margin-right: 1.25rem; /* 20px */
   }
- 
 }
 @media (max-width: 766px) {
   .about-us{
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .img-home img{
+    border-radius: 16px;
+  }
+  .text-home{
+    top:70px
+  }
+  .text-home p{
+    font-size: 0.75rem; /* 12px */
+    line-height: 1rem; /* 16px */
+  }
+  .text-home h1{
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.75rem; /* 28px */
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .text-home button{
+    font-size: 0.75rem; /* 12px */
+    line-height: 1rem; /* 16px */
+    padding: 0.25rem 1.5rem 0.25rem 1.5rem;
+  }
+  .coin{
+    border-radius: 12px;
+  }
+  .coin-user img, .redeem-coin img{
+    max-height: 2rem; /* 32px */
+  }
+  .coin-user p{
+    font-size: 0.75rem; /* 12px */
+    line-height: 1rem; /* 16px */
+  }
+  .carousel p {
+    font-size: 15px;
   }
   .introduction-desc h1, .about-text h1, .why-desc h1, .gabung-desc h1{
     font-size: 1.5rem;
@@ -151,4 +184,38 @@
     height: 2rem;
     margin-top: 0.25rem;
   }
+  .container-page {
+    padding: 0;
+  }
+  .redeem-coin p{
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem; /* 20px */
+  }
+  .redeem-card {
+    flex-wrap: wrap; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    gap: 1rem;
+  }
+  .card-redeem {
+    width: 100%;
+  }
+  .redeem-coin{
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+  }
+  .redeem-ewallet{
+    gap: 1rem;
+    width: 150px;
+  }
+  .redeem-ewallet img{
+    width: 100px;
+    height: auto;
+  }
+  .btn-claim {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
 }

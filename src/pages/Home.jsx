@@ -16,7 +16,7 @@ export default function HomePage() {
   const next = () =>
     setCurr((curr) => (curr === slides.length - 1 ? 0 : curr + 1));
   useEffect(() => {
-    const autoSlideInterval = 3000;
+    const autoSlideInterval = 8000;
     const autoSlide = true;
 
     if (!autoSlide) return;
@@ -65,7 +65,7 @@ export default function HomePage() {
           className="coin-user flex items-center gap-2 mx-auto"
         >
           <img src={Coin} className="w-auto max-h-12" alt="coin image" />
-          <h1 className="font-semibold text-xl">
+          <h1 className="coin-home font-semibold text-xl">
             {userData.coin_user !== null && userData.coin_user !== undefined
               ? `${userData.coin_user} Koin`
               : "0 Koin"}

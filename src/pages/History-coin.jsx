@@ -28,6 +28,7 @@ function HistoryCoin() {
         const { coin_user: coinUser, id_user: userId } = userResponse.data.user;
         setCoinUser(coinUser);
         setUserId(userId);
+        console.log(coinUser);
 
         // Fetch coin history
         const historyResponse = await axios.get(
@@ -38,17 +39,17 @@ function HistoryCoin() {
             },
           },
         );
-        const filteredCoinHistory = historyResponse.data.data.filter(item => item.id_user === userId)
-        setCoinHistory(filteredCoinHistory);
+        const coinHistory = historyResponse.data.data
+        const filteredCoinHistory = coinHistory.filter((item) => item.id_user === userId)
         console.log(filteredCoinHistory);
-        console.log(historyResponse.data.data.id_user);
+        setCoinHistory(filteredCoinHistory)
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     }
 
     fetchData();
-  }, [userId]);
+  }, []);
   
 
   const handleSelectChange = (event) => {

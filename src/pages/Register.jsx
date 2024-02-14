@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../components/Register.css";
 import "../components/component.css";
 import "../App.css";
-import Logo from "../assets/logo.png";
+import Logo from "../pic/Logo.png";
 import Shopping from "../pic/shopping.png";
 import ButtonGreen from "../components/Button-green";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
