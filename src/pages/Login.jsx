@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/Logo.png";
-import Shopping from "../pic/shopping.png";
+import Shopping from "../pic/Shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
 import { useDispatch, useSelector } from "react-redux";
 import {
