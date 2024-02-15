@@ -72,7 +72,7 @@ export default function HomePage() {
           totalProducts += transaction.total_product;
         });
   
-        const environmentalFactor = 0.68;
+        const environmentalFactor = 0.64;
         const environmentalMetrics = environmentalFactor * totalProducts;
         const outputMetrics = environmentalMetrics.toFixed(2)
         setGetMetrics(outputMetrics)
