@@ -1,10 +1,18 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD:src/pages/Login.jsx
 import "../components/component.css";
 import "../App.css";
 import Logo from "../pic/Logo.png";
 import Shopping from "../pic/Shopping.png";
 import NavbarRegisterLogin from "../components/NavbarRegisterLogin";
+=======
+import "../../src/components/component.css";
+import "../../src/App.css";
+import Logo from "../../src/pic/Logo.png";
+import Shopping from "../../src/pic/Shopping.png";
+import NavbarRegisterLogin from "../../src/components/NavbarRegisterLogin";
+>>>>>>> 54f09401a558bcbbadaccb1160158887277af1d0:public/pages/Login.jsx
 import { useDispatch, useSelector } from "react-redux";
 import {
   loginUser,
@@ -13,8 +21,8 @@ import {
   setPassword,
   setRememberMe,
   clearError,
-} from "../redux/slice/login-slice";
-import ButtonGreen from "../components/Button-green";
+} from "../../src/redux/slice/login-slice";
+import ButtonGreen from "../../src/components/Button-green";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
