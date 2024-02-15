@@ -123,7 +123,7 @@ export default function NavbarSarange() {
               <Link to="/sell/profile">
                 <ButtonGreen text="Lihat Profile" />
               </Link>
-              <ButtonOutline text="Logout" onClick={handleLogout} />
+              <ButtonOutline text="Keluar" onClick={handleLogout} />
             </div>
           </div>
           <button

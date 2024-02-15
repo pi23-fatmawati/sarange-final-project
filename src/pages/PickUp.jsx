@@ -134,7 +134,7 @@ export default function PickUp() {
   if (loadingUserData || loadingCartData) return <p>Loading...</p>;
 
   return (
-    <div className="container-page">
+    <div className="container-page mt-20">
       <BackNavigation page="Keranjang" />
       <HeaderPage
         title="Atur Jadwal Penjemputan"

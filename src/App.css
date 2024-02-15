@@ -187,10 +187,6 @@
   .container-page {
     padding: 0;
   }
-  .redeem-coin p{
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.25rem; /* 20px */
-  }
   .redeem-card {
     flex-wrap: wrap; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
