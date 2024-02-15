@@ -22,7 +22,6 @@ import Footer from "./components/Footer";
 import { ArticleProvider } from "./context/ArticleContext";
 import Article from "./pages/Article";
 import Contact from "./pages/Contact";
-import HistoryCoin from "./pages/History-coin";
 
 function App() {
   return (
