@@ -2,15 +2,20 @@ import Home from "../assets/home.png";
 import Coin from "../assets/coin.png";
 import Redeem from "../assets/redeem.png";
 import Image1 from "../assets/carousel-1.png";
+import Image2 from "../assets/carousel-2.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserBasicInfo } from "../redux/slice/user-slice";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export default function HomePage() {
-  const slides = [Image1, Image1, Image1];
+  const slides = [Image1, Image2];
   const [curr, setCurr] = useState(0);
+  const [getMetrics, setGetMetrics] = useState(null)
+
   const prev = () =>
     setCurr((curr) => (curr === 0 ? slides.length - 1 : curr - 1));
   const next = () =>
@@ -36,6 +41,53 @@ export default function HomePage() {
   if (isLoading) {
     return <div className="container-page text-center">Loading...</div>;
   }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const token = Cookies.get("token");
+        // Fetch user id
+        const userResponse = await axios.get(
+          "https://final-sarange-eff62c954ab5.herokuapp.com/homepage",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        const { id_user: userId } = userResponse.data.user;
+  
+        // Fetch transaction data
+        const transactionResponse = await axios.get(
+          `https://final-sarange-eff62c954ab5.herokuapp.com/transaction?id_user=${userId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        const transactions = transactionResponse.data.transactions;
+
+        let totalProducts = 0;
+        transactions.map((transaction) => {
+          totalProducts += transaction.total_product;
+        });
+  
+        const environmentalFactor = 0.64;
+        const environmentalMetrics = environmentalFactor * totalProducts;
+        const outputMetrics = environmentalMetrics.toFixed(2)
+        setGetMetrics(outputMetrics)
+  
+        console.log("Total produk:", totalProducts);
+        console.log("Metrik lingkungan:", outputMetrics);
+        
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    }
+  
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="home container mx-auto flex items-center justify center max-w-screen-lg">
@@ -47,7 +99,9 @@ export default function HomePage() {
             Hai {userData.user_name || "User"}! Terima kasih, ya
           </p>
           <h1 className="text-3xl font-bold py-1">
-            10kg CO<sub>2</sub>
+          {getMetrics !== null && getMetrics !== undefined
+              ? `${getMetrics} Kg CO`
+              : "0 Kg CO"}<sub>2</sub>
           </h1>
           <p className="text-xl font-medium">
             telah berkurang berkat penjualan sampahmu.
