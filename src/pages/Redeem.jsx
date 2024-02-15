@@ -15,9 +15,9 @@ import Cookies from "js-cookie";
 
 export default function Redeem() {
     const data = [
-      { id: 1, money: '20.000', coin: 500},
-      { id: 2, money: '50.000', coin: 1000 },
-      { id: 3, money: '100.000', coin: 2000 }
+      { id: 1, money: '20.000', coin: 400},
+      { id: 2, money: '50.000', coin: 800 },
+      { id: 3, money: '100.000', coin: 1500 }
     ];
   
     const eWalletData = [
@@ -99,7 +99,7 @@ export default function Redeem() {
     }
     
     return (
-      <div className="container-page">
+      <div className="container-page mt-20">
         <BackNavigation page="Beranda" />
         <div className="redeem-coin container mx-auto">
           <CardCoin coin={coinUser !== null &&coinUser !== undefined

@@ -57,7 +57,7 @@ function HistoryCoin() {
   };
 
   return (
-    <div className="container-page">
+    <div className="container-page mt-20">
       <BackNavigation page="Beranda" />
       <div className="history-coin">
         <CardCoin coin={coinUser !== null &&coinUser !== undefined

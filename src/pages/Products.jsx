@@ -25,7 +25,7 @@ function Product() {
   }
   return (
     <>
-      <div className="container-page flex flex-col gap-4 w-full">
+      <div className="container-page flex flex-col gap-4 w-full mt-20">
         <HeaderPage
           title={`Hai ${userBasicInfo.data.user_name}, mau jual apa hari ini?`}
           subtitle="Yuk, jaga bumi dan dapatkan koin dari setiap penjualan sampahmu!"

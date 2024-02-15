@@ -121,7 +121,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="container-page">
+    <div className="container-page mt-20">
       <div className="max-w-screen-s-m-xl mx-4 md:mx-20 bg-white rounded border">
         <div className="border-b px-6 py-3">
           <h2 className="text-xl font-semibold">Informasi Pengguna</h2>
