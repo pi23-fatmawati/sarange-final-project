@@ -10,8 +10,13 @@ import ConfirmModal from "../components/ConfirmModal";
 import SuccessModal from "../components/SuccessModal";
 import WarningModal from "../components/WarningModal";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../redux/slice/cart-slice";
+import { useNavigate } from "react-router-dom";
 
 export default function PickUp() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
   const [userData, setUserData] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
@@ -66,6 +71,11 @@ export default function PickUp() {
     fetchData();
   }, []);
 
+  const handleEditProfile = () => {
+    navigate("/sell/profile")
+    console.log("page");
+  }
+
   const handleChangeUserData = (e) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
@@ -75,6 +85,7 @@ export default function PickUp() {
         [name]: value,
       },
     }));
+    
   };
 
   const handlePickupDateChange = (newDate) => {
@@ -92,8 +103,6 @@ export default function PickUp() {
           pickup_date: pickupDate,
         })),
       };
-
-      // Create transaction
       await axios.post(
         "https://final-sarange-eff62c954ab5.herokuapp.com/transaction",
         requestData,
@@ -103,12 +112,24 @@ export default function PickUp() {
           },
         }
       );
+      dispatch(updateCart());
       setLoadingTransaction(false);
     } catch (error) {
       console.error("Error creating transaction:", error);
       setLoadingTransaction(false);
     }
   };
+
+  const handleConfirmPickup = () => {
+    if (!userData.user.address || !userData.user.phone_number || userData.user.address === 'null' || userData.user.phone_number === 'null')  {
+      alert("Mohon isi alamat dan nomor handphone anda");
+    } else if (!pickupDate) {
+      alert("Mohon isi tanggal penjemputan")
+    }
+    else {
+      setOpenModal(true);
+    }
+  }
 
   if (loadingUserData || loadingCartData) return <p>Loading...</p>;
 
@@ -131,7 +152,12 @@ export default function PickUp() {
             className="rounded-lg"
             type="text"
             value={userData.user.phone_number}
-            onChange={handleChangeUserData}
+          
+            onClick={() => {
+              if (!userData.user.phone_number || userData.user.phone_number === 'null') {
+                handleEditProfile()
+              }
+            }}
           />
           <div className="flex flex-col w-full gap-2 border border-solid border-grey-2 rounded-lg py-2 px-4">
             <div className="font-medium p-2">Alamat Penjemputan</div>
@@ -147,7 +173,11 @@ export default function PickUp() {
                 <textarea
                   className="rounded-lg w-full"
                   value={userData.user.address}
-                  onChange={handleChangeUserData}
+                  onClick={() => {
+                    if (!userData.user.address || userData.user.address === 'null') {
+                      handleEditProfile()
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -167,31 +197,47 @@ export default function PickUp() {
         </div>
       </div>
       <div className="mt-6 float-right">
-        <ButtonGreen
-          text="Atur Jadwal"
-          dataModalTrigger
-          onClick={handleSchedulePickup}
-          disabled={loadingTransaction}
-          link="/sell/transactions"
-        />
+        {loadingTransaction ? (
+          <span>
+            <ButtonGreen
+              text="Mengatur..."
+              dataModalTrigger
+              disabled={loadingTransaction}
+            />
+          </span>
+        ) : (
+          <ButtonGreen
+            text="Atur Jadwal"
+            dataModalTrigger
+            onClick={handleConfirmPickup}
+            disabled={loadingTransaction}
+          />
+        )}
       </div>
-      {/* <ConfirmModal
+      <ConfirmModal
         show={openModal}
+        textConfirm={loadingTransaction ? "Mengatur..." : "Ya"}
         onClose={() => setOpenModal(false)}
-        onConfirm={() => {
-          setOpenModal(false);
-          setSuccessModal(true);
+        onConfirm={async () => {
+          try {
+            await handleSchedulePickup();
+            setOpenModal(false);
+            setSuccessModal(true);
+          } catch (error) {
+            console.error("Error handling pickup:", error);
+          }
         }}
+        onClick
         header="Apakah kamu sudah yakin dengan jadwal penjemputanmu?"
-        content="Sampahmu akan dijemput pada ${pickupDate}"
+        content={`Sampahmu akan dijemput pada ${pickupDate}`}
       />
       <SuccessModal
         show={successModal}
         link="/sell/transactions"
         onClose={() => setSuccessModal(false)}
         header="Penjemputan sampahmu berhasil dijadwalkan"
-        content="Pastikan sampahmu sudah siap dan sesuai dengan ketentuan. Sampah akan dijemput pada tanggal 20 Januari 2024 antara pukul 08.00 - 17.00 WIB."
-      /> */}
+        content={`Pastikan sampahmu sudah siap dan sesuai dengan ketentuan. Sampah akan dijemput pada tanggal ${pickupDate} antara pukul 08.00 - 17.00 WIB.`}
+      />
     </div>
   );
 }

@@ -22,10 +22,10 @@ import SuccessModal from "../components/SuccessModal";
 import ConfirmModal from "../components/ConfirmModal";
 
 const Register = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const [successModal, setSuccessModal] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
   const { user_name, email, password, confirm_password, agreement, error, loading } =
     useSelector((state) => state.register);
 
@@ -50,7 +50,7 @@ const Register = () => {
           dispatch(setError("Harap setujui syarat dan ketentuan yang berlaku"));
           return;
         }
-        const response = await dispatch(
+        const response = dispatch(
           registerUser({
             user_name,
             email,
@@ -59,7 +59,7 @@ const Register = () => {
             agreement,
           })
         );
-        if (response && response.status === 201) {
+        if (response) {
           navigate("/sell/profile");
           setSuccessModal(true);
           resetForm();

@@ -62,30 +62,22 @@ export const {
 } = registerSlice.actions;
 
 export const registerUser = (userData) => async (dispatch) => {
-  try {
-    dispatch(startLoading());
-    const response = await axios.post(
-      "https://final-sarange-eff62c954ab5.herokuapp.com/register",
-      userData
-    );
-    const data = response.data;
-    const expirationTime = new Date();
-    expirationTime.setHours(expirationTime.getHours() + 12);
-    Cookies.set("token", data.token, { expires: expirationTime });
-    dispatch(resetForm());
-    return response;
-  } catch (error) {
-    if (
-      axios.isAxiosError(error) &&
-      error.response &&
-      error.response.status === 400
-    ) {
-      dispatch(setError("Email sudah terdafar"));
-    } else {
-      dispatch(setError("Error saat mencoba daftar"));
-    }
-    console.log(error);
-  } finally {
+  dispatch(startLoading());
+    try {
+        const response = await axios.post("https://final-sarange-eff62c954ab5.herokuapp.com/register", userData);
+        const data = response.data;
+
+        if(response.status !== 201) {
+            throw new Error(data.error || 'gagal mendaftar');
+        }
+
+        Cookies.set("token", data.token, { expires: 7 })
+
+        dispatch(resetForm())
+    } catch {
+        console.error("Error registering", error)
+        dispatch(setError(error.message || "Gagal mendaftar"));
+    } finally {
     dispatch(finishLoading());
   }
 };

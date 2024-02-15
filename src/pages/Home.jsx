@@ -16,7 +16,7 @@ export default function HomePage() {
   const next = () =>
     setCurr((curr) => (curr === slides.length - 1 ? 0 : curr + 1));
   useEffect(() => {
-    const autoSlideInterval = 3000;
+    const autoSlideInterval = 8000;
     const autoSlide = true;
 
     if (!autoSlide) return;
@@ -38,7 +38,7 @@ export default function HomePage() {
   }
   return (
     <>
-      <div className="home container mx-auto flex items-center justify center">
+      <div className="home container mx-auto flex items-center justify center max-w-screen-lg">
         <div className="img-home mt-20 w-full">
           <img className="w-full" src={Home} alt="image home" />
         </div>
@@ -59,14 +59,14 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
-      <div className="coin container mt-5 mx-auto w-full flex justify-around p-2">
+      <div className="coin mt-5 mx-auto w-full flex justify-around p-2 max-w-screen-lg">
         <Link
           to={"/sell/history-coin"}
           className="coin-user flex items-center gap-2 mx-auto"
         >
           <img src={Coin} className="w-auto max-h-12" alt="coin image" />
-          <h1 className="font-semibold text-xl">
-            {userData.coin !== null && userData.coin !== undefined
+          <h1 className="coin-home font-semibold text-xl">
+            {userData.coin_user !== null && userData.coin_user !== undefined
               ? `${userData.coin_user} Koin`
               : "0 Koin"}
           </h1>
@@ -80,39 +80,36 @@ export default function HomePage() {
           <p className="font-semibold text-xl">Tukar Koin</p>
         </Link>
       </div>
-      <div className="carousel container mx-auto mt-5">
+      <div className="carousel container mx-auto mt-5 max-w-screen-lg">
         <p className="font-semibold text-xl">Untuk Anda</p>
         <div className="flex justify-center items-center">
           <div className="w-full">
             <div className="overflow-hidden w-full relative">
               <div
-                className="flex carousel-img transition-transform ease-out duration-500"
+                className="flex carousel-img transition-transform ease-out duration-500 "
                 style={{
                   transform: `translateX(-${curr * 100}%)`,
                   width: "100%",
                 }}
+                onClick={()=> window.open('/education')}
               >
                 {slides.map((s, index) => (
                   <img
                     className="block w-full object-cover mx-0"
-                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                    style={{ maxHeight: "100%", maxWidth: "100%", cursor: "pointer"}}
                     key={index}
                     src={s}
                     alt={`slide-${index}`}
                   />
                 ))}
               </div>
-              <div className="absolute inset-0 flex items-center justify-between p-4">
-                <button
-                  onClick={prev}
-                  className="p-1 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white"
-                >
+              <div className="absolute top-0 bottom-0 left-0 flex items-center">
+                <button onClick={prev} className='p-1 absolute left-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
                   <ChevronLeft />
                 </button>
-                <button
-                  onClick={next}
-                  className="p-1 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white"
-                >
+              </div>
+              <div className="absolute top-0 bottom-0 right-0 flex items-center">
+                <button onClick={next} className='p-1 absolute right-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white'>
                   <ChevronRight />
                 </button>
               </div>
